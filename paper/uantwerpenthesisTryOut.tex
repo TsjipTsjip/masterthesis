@@ -1,0 +1,118 @@
+\documentclass[we,twoside,openright,report,11pt]{uantwerpenthesistemplate}
+%the first option is to define the colour scheme per faculty.
+%Options are we (= sciences) or ti (= applied engineering)
+
+%\documentclass{article}
+%\usepackage{arxiv}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+ \usepackage{backref} % back references from the bibliography
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{amsmath}
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}
+\usepackage{cite} % organizes citations
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{cleveref}
+\usepackage{longtable}
+
+%\usepackage[disable]{todonotes} %% Uncomment this line and comment the next one to make the notes invisible
+\usepackage{todonotes}
+\newcommand{\comment}[1]{\todo[color=orange!40, inline]{\footnotesize{#1}}}
+\newcommand{\student}[1]{\todo[color=green!40, inline]{\footnotesize{Student: #1}}}
+\newcommand{\serge}[1]{\todo[color=purple!40, inline]{\footnotesize{Serge: #1}}}
+
+
+
+\hypersetup{
+    colorlinks,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,%
+    urlcolor=black,
+%
+%    pdftitle={XXX},    % title
+%    pdfauthor={XXX},     % author
+%    pdfsubject={XXX},   % subject of the document
+%    pdfcreator={PDF LaTex},   % creator of the document
+}
+\backrefsetup{verbose=false,hyperpageref}
+
+
+\bamadegree{we-nl-ma-infse} %look up the encoding of this title in file uantwerpendocs-degree.data
+% Options are 
+%we-nl-ba-inf = Bachelor of Science in de informatica
+%we-en-ma-infcn = Master of Science in computer science: computer networks
+%we-en-ma-infdsai = Master of Science in computer science: data science and artificial intelligence
+%we-en-ma-infse = Master of Science in computer science: software engineering
+%we-nl-ma-infcn = Master of Science in de informatica: computernetwerken
+%we-nl-ma-infdsai = Master of Science in de informatica: data science en artifici‘le intelligentie
+%we-nl-ma-infse = Master of Science in de informatica: software engineering
+
+\title{Your Thesis Title}
+\subtitle{Ommit subtitle if you don't have one}
+\author{Student's Full Name}
+
+\supervisor{prof. Prof. Serge Demeyer}{AnSyMo, UAntwerpen}
+\cosupervisor{ing. P. Pienter}{AnSyMo, UAntwerpen}
+\extsupervisor{dr. H. Warwinkel}{TNT-Bang, N.V.}
+
+\academicyear{2022 - 2023}
+\date{\today}
+
+
+\begin{document}
+
+
+\maketitle
+
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+
+\newpage
+\input{sections/abstract_english}
+
+\newpage
+\input{sections/abstract_dutch}
+
+\newpage
+\input{sections/acknowledgments}
+
+\newpage
+\input{sections/sec_introduction}
+
+\newpage
+\input{sections/sec_background}
+
+\newpage
+\input{sections/sec_method}
+
+\newpage
+\input{sections/sec_results}
+
+\newpage
+\input{sections/sec_threats}
+
+\newpage
+\input{sections/sec_relatedwork}
+
+\newpage
+\input{sections/sec_conclusion}
+
+\newpage
+\bibliographystyle{unsrt}
+\bibliography{references}
+\addcontentsline{toc}{section}{References}
+
+\end{document}

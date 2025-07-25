@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{demeyer2002}
+Serge Demeyer, St\'{e}phane Ducasse, Oscar Nierstrasz, and Ralph~E. Johnson.
+\newblock {\em Object Oriented Reengineering Patterns}.
+\newblock Morgan Kaufmann Publishers Inc., San Francisco, CA, USA, 2002.
+
+\bibitem{vanbladel2020}
+Brent van Bladel and Serge Demeyer.
+\newblock Clone detection in test code: An empirical evaluation.
+\newblock In {\em 27th International Conference on Software Analysis, Evolution
+  and Reengineering (SANER)}, pages 492--500, 2020.
+
+\bibitem{parsai2020}
+Ali Parsai and Serge Demeyer.
+\newblock Comparing mutation coverage against branch coverage in an industrial
+  setting.
+\newblock {\em International Journal on Software Tools for Technology
+  Transfer}, 22(4):365--388, 2020.
+
+\bibitem{njima2019}
+Mercy Njima and Serge Demeyer.
+\newblock Value-based technical debt management: An exploratory case study in
+  start-ups and scale-ups.
+\newblock In {\em 2nd International Workshop on Software-Intensive Business:
+  Start-Ups, Platforms, and Ecosystems}, IWSiB 2019, page 54–59, New York,
+  NY, USA, 2019. Association for Computing Machinery.
+
+\end{thebibliography}

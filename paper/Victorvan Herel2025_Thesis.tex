@@ -1,0 +1,72 @@
+%-- LaTeX template for a master thesis within AnSyMo
+%-- Version 1.0 -- Adapted for 2022 University House Style
+%-- Clone from https://sdemeyer@bitbucket.org/sdemeyer/
+\documentclass[a4paper,11pt,final,oneside,openright]{report}
+
+\newcommand{\thesisTitle}{Computer-aided conflict detection between open-source software licenses}
+\newcommand{\studentName}{Victor van Herel}
+
+\input{usepackages}
+\input{useconditional}
+\input{usesettings}
+\input{usecommands}
+
+\title{\thesisTitle}
+\author{\studentName}
+\date{\today}
+
+\begin{document}
+
+
+\input{sections/titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+
+\newpage
+\input{sections/abstract_english}
+
+\ifthenelse{\boolean{englishDocument}} {
+	%% For the english master one does not need to include a dutch summary}
+}{
+	\newpage
+	\input{sections/abstract_dutch}
+}
+\newpage
+\input{sections/acknowledgments}
+
+\newpage
+\input{sections/sec_introduction}
+
+\newpage
+\input{sections/sec_background}
+
+\newpage
+\input{sections/sec_relatedwork}
+
+\newpage
+\input{sections/sec_method}
+
+\newpage
+\input{sections/sec_results}
+
+% \newpage
+% \input{sections/sec_threats}
+
+\newpage
+\input{sections/sec_conclusion}
+
+\newpage
+\bibliographystyle{unsrt}
+\bibliography{references}
+\addcontentsline{toc}{chapter}{References}
+
+\appendix
+\newpage
+\input{sections/apndx_overlap.tex}
+
+\end{document}
