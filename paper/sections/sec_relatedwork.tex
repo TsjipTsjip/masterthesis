@@ -223,4 +223,136 @@ Among these key activities of the OSADL, \textbf{open source license compliance}
 
 \section{Open source license checklists}
 
-A first element we examine is the open source license checklists segment. At the time of writing, the OSADL provides what can be interpreted as a checklist of obligations to comply with when one wishes to interact with a specific license, for a set list of 116 licenses. This checklist has a relatively fixed format, which we will go over shortly before moving on to the next topic.
+A first element we examine is the open source license checklists. At the time of writing, the OSADL provides what can be interpreted as a checklist of obligations to comply with when one wishes to interact with a specific license, for a set list of 116 licenses. This checklist has a relatively fixed format, which we will go over shortly before moving on to the next topic. \\
+
+An open source license checklist is essentially formulated as a checklist with items to ensure software license compliance in general cases, using well-defined language elements. A checklist has two sections, an obligations section which describes the obligations imposed by a license and an optional supplements section which contains supplemental information which is sometimes already encoded in the obligations section.
+
+It is important to understand that these checklists are still the result of manual curated work, as they are produced on the basis of requests made by members of the OSADL organization. Especially the supplements section, which often lists things like the presence of a copyleft clause, explicit (in)compatibilities, ... is the result of expert knowledge weighing in on the formulation. \\
+
+The OSADL also makes clear in which context these license checklists are used. On this subject, it says the following: "The checklists assume a situation where a licensee of Open Source software incorporates such software components into a product - either a physical device with installed software or a software distribution on a storage medium or on the Internet - and needs to establish appropriate processes in order to fulfill the imposed license obligations for legal compliance when conveying the product to customers."~\cite{osadl-license-checklists-scope}
+
+To draw a parallel to the integration types discussed in Chapter~\ref{ch:introduction}, this lines up fully with the full inclusion pattern, due to the sentence "... incorporates such software components into a product ...".
+
+\subsection{Example: The MIT license}
+
+To explain how the format works, we explain this by referring to an example checklist of the MIT license, shown below:
+
+\begin{verbatim}
+USE CASE Source code delivery OR Binary delivery
+  YOU MUST Provide Copyright notices
+  YOU MUST Provide License text
+  YOU MUST Provide Warranty disclaimer
+\end{verbatim}
+
+The MIT license is an example of a license that does not need a supplements section, as it is very simple in scope and application, and does not list any specific interactions with other specific licenses. Still, we can learn some key facts from this about a license checklist's structure.
+
+\begin{itemize}
+	\item All obligations listed are "scoped" in one or more use cases, preceeded with the \texttt{USE CASE} statement. We will discuss the different use cases in a separate section.
+	\item Obligations can be very specific in what they impose. In Chapter~\ref{ch:introduction}, we showed the text form of the license. Here we see that this license is split up into the copyright notice (the first line), the license text (lowercase paragraph) and the license disclaimer (uppercase paragraph). Each element is handled separately (though identically) in the license checklist.
+\end{itemize}
+
+It should also be noted that the OSADL does define each of the terms it uses (with some exceptions in the case of license names, ...). For example, the following definitions exist quoted directly from the OSADL data:
+
+\begin{itemize}
+	\item \textbf{USE CASE:} Sometimes the license obligations may allow the distributor to freely select between a number of optional use cases; the USE CASE language construct is introduced for this purpose. Several USE CASE language constructs to which the same license conditions apply may be combined using the OR language construct. If a particular USE CASE is mentioned repeatedly, e.g. once along with another USE CASE and once not, the obligations of all USE CASE sections must be fulfilled.
+	\item \textbf{YOU MUST:} The YOU MUST language construct specifies an individual license obligation, i.e. what to do, probably among other things, to become license compliant. It may optionally be followed by indented language constructs such as ATTRIBUTE that further describe the license obligation.
+	\item \textbf{Provide:} The action to Provide means to make available particular material such as a license text to another natural or legal person. While the action to Forward is restricted to conveying existing material, the action to Provide expands the meaning in the sense that the material may be newly generated as long as it fulfills its purpose.
+	\item \textbf{Source code delivery:} Licenses may treat the various aggregate states of deliverable software such as source, intermediate and object code differently. The term Source code delivery denotes a situation where source code is delivered, and no software component is included in the delivery without corresponding source code.
+	\item \textbf{Binary delivery:} A software distribution may contain material not in a human-readable programming language, but in binary machine or intermediate code that was generated from the project's source code using a compiler. Some licenses may then impose disclosure obligations that may be fulfilled either by delivering the corresponding source code along with the binary code or by offering to do so at a later date. Irrespective of whether disclosure obligations exist and how they must be fulfilled, when software is delivered at least partly in object form then this is referred to as Binary delivery.
+	\item \textbf{Copyright notice:} The Copyright notice indicates the name of the holder of the exclusive usage rights. In its minimal form, it may only contain a name in an obvious context. Usually, however, the name of the holder of the exclusive usage rights is preceded by the word 'Copyright', the © symbol or the letter c in parentheses '(c)', and a number or several numbers that indicate the year when the work was created." If the author is not the holder of the exclusive usage rights, the name of the holder of the exclusive usage rights may be followed by an attribution to the author.
+	\item \textbf{License text:} The term License text denotes the unabbreviated original text of a particular license in its original language. It may either be printed on paper or contained in a data file on a medium using an obvious and well-known or an individually defined and specified character encoding.
+	\item \textbf{Warranty disclaimer:} The license text may contain a clause or several clauses where the original authors refuse any warranty for malfunction or damages that may occur when using the licensed software. Such section is referred to as Warranty disclaimer.
+\end{itemize}
+
+In these definitions, we see the three separated elements from the MIT license returning as defined constructs which are defined generally, and thus also applicable to other license models.
+
+\subsection{Detecting copyleft clauses based on a license checklist}
+
+An interesting property of these license checklists is that, while always explicitly mentioned in the supplements section, a copyleft property can also be inferred through the obligations section. We show this property with an example, namely the GPL-1.0-only license.
+
+\comment{Victor: See if there's a better way to lay this out.}
+
+\begin{verbatim}
+USE CASE Source code delivery
+    YOU MUST Provide Copyright notices
+        ATTRIBUTE Highlighted
+        ATTRIBUTE Appropriately
+    YOU MUST Provide Warranty disclaimer (Warranty disclaimer)
+        ATTRIBUTE Highlighted
+        ATTRIBUTE Appropriately
+    YOU MUST NOT Modify License notices
+    YOU MUST NOT Modify Warranty disclaimer (Warranty disclaimer)
+    YOU MUST Provide License text
+    IF Software modification
+        YOU MUST Grant License
+            ATTRIBUTE Original license
+        YOU MUST Provide Modification notice
+        YOU MUST Provide Modification date
+        IF Interactive
+            YOU MUST Display License announcement
+            YOU MUST Display Copyright notices
+            YOU MUST Display Warranty disclaimer
+            YOU MUST Reference License text
+    YOU MUST NOT Restrict Granted rights
+USE CASE Binary delivery
+    YOU MUST Provide Copyright notices
+        ATTRIBUTE Highlighted
+        ATTRIBUTE Appropriately
+    YOU MUST Provide Warranty disclaimer (Warranty disclaimer)
+        ATTRIBUTE Highlighted
+        ATTRIBUTE Appropriately
+    YOU MUST NOT Modify License notices
+    YOU MUST NOT Modify Warranty disclaimer (Warranty disclaimer)
+    YOU MUST Provide License text
+    EITHER
+        YOU MUST Provide Source code
+            ATTRIBUTE Machine-readable
+    OR
+        YOU MUST Provide Written offer (Written offer)
+            ATTRIBUTE Duration 3 years
+            ATTRIBUTE To Any third party
+            ATTRIBUTE No profit
+            ATTRIBUTE Delayed source code delivery
+                ATTRIBUTE Machine-readable
+    IF Software modification
+        YOU MUST Grant License
+            ATTRIBUTE Original license
+        YOU MUST Provide Modification notice
+        YOU MUST Provide Modification date
+        IF Interactive
+            YOU MUST Display License announcement
+            YOU MUST Display Copyright notices
+            YOU MUST Display Warranty disclaimer
+            YOU MUST Reference License text
+    YOU MUST NOT Restrict Granted rights
+(... 73 license compatibility/incompatibility statements ...)
+COPYLEFT CLAUSE Yes
+\end{verbatim}
+
+In this example, the supplement (represented by the last two lines) mentions correctly that a copyleft clause is indeed present. However, we see this requirement returning in the obligations section, namely in the following lines:
+
+\begin{verbatim}
+USE CASE Source code delivery
+    ...
+    IF Software modification
+        YOU MUST Grant License
+            ATTRIBUTE Original license
+    ...
+USE CASE Binary delivery
+    EITHER
+        YOU MUST Provide Source code
+            ATTRIBUTE Machine-readable
+    OR
+        YOU MUST Provide Written offer (Written offer)
+            ATTRIBUTE Duration 3 years
+            ATTRIBUTE To Any third party
+            ATTRIBUTE No profit
+            ATTRIBUTE Delayed source code delivery
+                ATTRIBUTE Machine-readable
+    IF Software modification
+        YOU MUST Grant License
+            ATTRIBUTE Original license
+        ...
+\end{verbatim}
+
+When summarized like this, we see a strict copyleft requirement emerging. Namely, in both delivery use cases, you are required to grant your changes under the original license (\textbf{but not the original copyright notices}). Even more so, in Binary delivery, you are also obligated to provide source code, either immediately or in the form of a written offer valid for 3 years.
