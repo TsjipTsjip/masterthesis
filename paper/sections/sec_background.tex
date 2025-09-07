@@ -1,34 +1,66 @@
 % !TEX root = ../Victorvan Herel2025_Thesis.tex
 
-\chapter{Justifying automated license conflict detection}\label{ch:background}
+\chapter{Practical context}\label{ch:background}
 
-In a Background section, we describe the main concepts and/or techniques that are important for a reader to better understand the experiments. Usually, we divide the background into several subsections, one for each concept/technique.
+Before we attempt to fomulate an answer to the questions proposed in Chapter~\ref{ch:introduction}, we first need to consider the context we are working in in a more concrete sense. This chapter examines existing standards and tools which are used by the industry to interact with software licenses, conflicts between them, compliance, ... right now.
 
-Introductory section that discusses licenses and the fact that they have been studied by other work.
+\section{Accepted standards}\label{sec:context:standards}
 
-\section{Contextualisation}\label{sec:context}
+To start, we would like to provide an overview of accepted standards in the industry which provide a leading effort in helping to handle complex software licensing interactions. These standards are listed in no particular order.
 
+\begin{itemize}
+	\item The \textbf{SPDX (System Package Data Exchange)} standard describes itself as "An open standard capable of representing systems with software components in as SBOMs (Software Bill of Materials) and other AI, data and security references supporting a range of risk management use cases.". To summarize, it is a way of including detailed licensing information right along with source code of the project in a standardized and well-defined way. This empowers projects such as ScanCode and FOSSology, which we will examine in the next section, to make very accurate reports of projects that employ the standard. It can also be employed for other use cases which are not relevant to this thesis, such as software security documentation.
+	
+	Aside from this, as a necessary addition, the SPDX standard also defines a set of licenses along with their license text which is immutable per published version of the standard. This is necessary as one of the standard's primary goals is facilitating software license compliance in a precise way. Having a fixed set of licenses to work with which each are provided with a fixed ID allows us to refer to licenses in very specific and unambiguous ways, provided they are part of the standard~\cite{spdx-home,spdx-licenses,spdx-explanation-1}.
+	
+	\item The \textbf{ReUse Software} project is an initiative by the Free Software Foundation Europe which provides a similar solution, profiling itself as an easy way to perform software license management in open source projects specifically. Like the SPDX standard, it provides tooling to add licensing information on a very granular level (up to individual files) within an open source code project. It improves the amount of projects automated scanning software can reliably analyse, with a focus on usability by project maintainers.
+	
+	This project does not provide a separate list of licenses, as it opts to make use of the SPDX license list~\cite{reuse-project-home}.
+\end{itemize}
 
-\subsection{Accepted standards}\label{sec:context:standards}
+These standards are primarily practical ways with which individual project maintainers can improve legal legibility of their software code, and offer this thesis a stable source of license texts in the form of the SPDX license list, along with a way to refer to each license correctly in short. As an example, the MIT license simply has the identifier \verb*|MIT|. \\
 
-SPDX, ReUse Project, ....
+\section{License scanners}\label{sec:license-scanners}
 
-OSADL (short-form)
+To perform license detection on projects that do not use either standard (though the listed scanners do fully support reading those), scanner software exists that generates reports on what licenses are in use in the project either directly or indirectly. The way these work differs, but the goal is the same, expanding the license horizon beyond what an individual project lists about itself.
 
-\section{License scanners (ScanCode, FOSSology)}\label{sec:license-scanners}
+\begin{itemize}
+	\item The \textbf{ScanCode} project focuses on providing machine-readable compliance reports as well as human-readable reports on a software component's licensing information which includes that of its dependencies. It is able to analyse source code and binary files for these license and copyright statements and is actively used in the industry to visualize compliance information and improve discovery of problems related to it. It should be noted that it generally does not provide automated reasoning about license configurations outside of policies defined by its user~\cite{scancode-home}.
+	
+	\item Similarly the \textbf{FOSSology} project also offers the same scanning functionality, but focuses on workflow-based deployments rather than being able to be used ad-hoc and directly by project developers. It is targeted at actors within the industry for whom license compliance is a primary concern~\cite{fossology-home}.
+	
+	\item \textbf{Licensee} is a light-weight tool which does not provide a suite for gaining insight in how licenses are used in the project, including dependencies. Instead, its focus is correctly identifying license texts to an SPDX license ID in pre-determined locations. Usually the \verb*|LICENSE| file of a repository~\cite{licensee-scanner}.
+	
+	\item Other scanners do exist as well, but are usually part of enterprise-level all-in-one solutions. The license compliance part operates in generally the same way.
+\end{itemize}
 
-ScanCode
-
-FOSSology
-
-Indicate the fact that these work based on a pre-defined matrix
+A key fact to consider is that while these scanners allow project maintainers to gain insight into their license usage, and even in some cases provide tooling to automatically check against certain policies the user defines, they do not provide any automated reasoning on their findings. If an incompatible license combination exists within a scanner's report, it is the responsibility of the user to flag it~\cite{scancode-home,fossology-home}. It is then a logical conclusion that the work presented in this thesis could be a first step to further improving the capabilities of these scanner projects.
 
 \section{Custom licenses}\label{sec:custom-licenses}
 
-Indicate that custom licenses (licenses only one project uses) are in use in the open source landscape, reason why, demonstrate how
+While repository maintainers can choose to use a pre-defined license (often part of the SPDX license list), we recall that this action is, in a general sense, the person choosing the terms under which others can use their work. This does not have to be by choosing a pre-defined license, as one can instead decide to create their own.
+
+While this is an option that is not often taken, as popular platforms such as GitHub encourage the use of a license upon creation of a repository to store code in~\cite{github_repository_creation}, custom licenses do exist and our thesis considers these as well. We show this fact by considering two avenues of reasoning:
+
+\begin{itemize}
+	\item The GitHub platform provides information on the number of repositories it hosts, and other metadata which can be consulted publicly. In this metadata, a project's primary license is listed as well. When one queries this data, an "Other" category is displayed which ranks third globally. This category contains all licenses which could not be identified by Licensee, the scanner which GitHub employs. This indicates that there is a very large number of repositories which use licenses that aren't known to the dataset it uses~\cite{github_innovation_graph_2025}.
+	\item Widely used licenses were once defined by someone. As a result, within lists of publicly available licenses (SPDX, ScanCode, ...), we can often recognize names that refer to companies or industry actors. Licenses like the Pixar license, the radvd license, the PostgreSQL license, the Ruby License, ... are all examples of licenses that were made dedicated to a project, and may have gained traction and use in other projects since. This indicates that developers do indeed choose to make their own license if they cannot find an existing license that suits their need~\cite{spdx-licenses,scancode-licensedb}.
+\end{itemize}
 
 \section{License families}\label{sec:license-families}
 
+While many different licenses exist, we can group them together into different license families based on their characteristics. This allows us to reason about groups of licenses in a general sense. The families of licenses relevant to this thesis are described here.
+
 \subsection{Copyleft licenses}
 
+A license that belongs in this family has a copyleft clause. This is a clause that requires that any derivative work created from the licensed work is also licensed under the same license, thus providing the work and any derivatives to the general public in an irrevocable way.
+
+The point of copyleft licenses is to ensure the openness of the work by use of a license. Copyleft licenses require an author to make the work open source, and due to the reciprocity effect, any derivative works must also be made open source in turn under the same terms. This is a very strong requirement, and a sub-family which weakens this effect is the Copyleft Limited family, which does require source code redistribution for derivative works, but the obligation to redistribute source code of linked projects, some of which may be proprietary, is limited to provisions present in the license itself~\cite{scancode-licensedb,license-integration-patterns-1,license-integration-patterns-2}.
+
+Well-known examples of the strong copyleft license family are the GPL and AGPL licenses. The Copyleft Limited license family is represented by the well known LGPL licenses~\cite{scancode-licensedb}.
+
 \subsection{Permissive licenses}
+
+The permissive licensing model creates an alternative approach to openness of the software. It does not impose the same limitation of which license derivative works must fall under. These licenses usually only require that the license text is retained along with the covered code in both source code and binary form, if those are provided to the general public and the covered code is contained within. This is as such a very open family of licenses, which places very reasonable conditions on usage of the work, but once satisfied, allows a wide range of permissions.
+
+The permissive license family varies a lot, and as such there are no clear categories within it. These are not necessary however, as generally, two permissive licenses can work with each other, unless if provisions exist that conflict in both licenses~\cite{license-integration-patterns-1,license-integration-patterns-2}. It should be noted that in the next chapter, we will find that for within the ground truth of this thesis, no combination exists where two permissive licenses are incompatible with eachother.

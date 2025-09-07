@@ -3,44 +3,50 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Victorvan Herel2025_Thesis.aux
 The style file: unsrt.bst
 Database file #1: references.bib
-You've used 4 entries,
+I was expecting a `,' or a `}'---line 205 of file references.bib
+ :  
+ :  author={Mike Linksvayer},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You've used 25 entries,
             1791 wiz_defined-function locations,
-            473 strings with 4439 characters,
-and the built_in function-call counts, 1158 in all, are:
-= -- 112
-> -- 38
-< -- 2
-+ -- 14
+            544 strings with 7082 characters,
+and the built_in function-call counts, 3228 in all, are:
+= -- 290
+> -- 58
+< -- 1
++ -- 35
 - -- 10
-* -- 60
-:= -- 163
-add.period$ -- 13
-call.type$ -- 4
-change.case$ -- 3
+* -- 51
+:= -- 383
+add.period$ -- 75
+call.type$ -- 25
+change.case$ -- 25
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 67
-empty$ -- 113
+cite$ -- 25
+duplicate$ -- 145
+empty$ -- 477
 format.name$ -- 10
-if$ -- 283
+if$ -- 822
 int.to.chr$ -- 0
-int.to.str$ -- 4
-missing$ -- 5
-newline$ -- 23
-num.names$ -- 4
-pop$ -- 17
+int.to.str$ -- 25
+missing$ -- 2
+newline$ -- 128
+num.names$ -- 6
+pop$ -- 180
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 47
+skip$ -- 94
 stack$ -- 0
-substring$ -- 67
-swap$ -- 29
-text.length$ -- 2
+substring$ -- 53
+swap$ -- 35
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 9
-width$ -- 5
-write$ -- 49
+while$ -- 10
+width$ -- 27
+write$ -- 234
+(There was 1 error message)

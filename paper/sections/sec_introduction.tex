@@ -2,47 +2,121 @@
 
 \chapter{Introduction}\label{ch:introduction}
 
-The introduction is probably the most important section of any academic work. 
+This thesis focuses on open source software licenses, we clarify this by defining this as the practice of placing restrictions on the use of a project's code and derived forms such as compiled binaries. Oftentimes, this is done through the use of standard licenses which are made to be shared and reused. But sometimes a project maintainer may choose to make their own license entirely. This is possible due to the way authorship rights work, which is the first subject we will shortly examine.
 
-A good way to structure an introduction is adopting the model of "Creating a Research Space" [C.A.R.S.] Model by John Swales. This model divides the typical intro into three "Moves".
+\section{Authorship rights \& open source}
+
+Whenever someone creates a work, which can take any shape and includes software projects, and fixes it in a shared form, they become the author and owner of all rights over the project. This means that, without the need to register the work with any organization or institute, the author can control all aspects of how their work may be used. Importantly, this also implies that no other person that obtains the work is allowed to use it without an explicit permission grant~\cite{us-copyright-law-definitions,eu-infosoc-directive,berne-convention}. \\
+
+This is a stark contrast to open source projects. For this, we start by examining the Open Source Definition, a set of ten requirements for being Open Source, as defined by the organization with the same name~\cite{opensource-org-definition}. Without going over each requirement in particular, the goal of publishing a work in an Open Source way can be described as allowing anyone to benefit from the work provided by allowing general "use" of the work. \\
+
+In the software world, this takes a very concrete form, namely sharing of code online which others are allowed to use in their own projects subject to the restrictions imposed by the author.
+
+\section{Standardized licenses}
+
+This is where standardised licenses come in, of which there are many~\cite{spdx-licenses,opensource-org-licenses,github_innovation_graph_2025,osadl-license-checklists}. Standard licenses intend to offer a sensible set of defaults for project maintainers to choose from which have this Open Source idea built in. In fact, there is a number of licenses which the Open Source organization explicitly confirms as compliant to their definition~\cite{opensource-org-licenses}. \\
+
+Most of these licenses are maintained by license stewards, and it is important to recognize that these stewards are usually organizations which have the ability to perform legal analysis of their licenses~\cite{opensource-org-licenses}.
+
+Additionally, their widespread use allows them to be analyzed and argued about which further expands the legal basis and understanding of these documents. \\
+
+A well known license which is very easy to understand is the MIT license, included as an example~\cite{opensource-org-mit}:
+\begin{verbatim}
+	Copyright <YEAR> <COPYRIGHT HOLDER>
+	
+	Permission is hereby granted, free of charge, to any person obtaining a copy of
+	this software and associated documentation files (the “Software”), to deal in
+	the Software without restriction, including without limitation the rights to
+	use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+	the Software, and to permit persons to whom the Software is furnished to do so,
+	subject to the following conditions:
+	
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+	
+	THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+	INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+	PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+	HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+	OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+\end{verbatim}
+
+This license has a clear structure and is very easy to interpret. This thesis will call back to this license (and others) in Chapter~\ref{ch:related-work}, where the interpretation will be elaborated on further. To anyone reading it however, the intention is clear. Anyone in possession of work under this license is allowed to perform any action with it, so long as they maintain the license and copyright statement, as well as the liability disclaimer in capitals.
+
+\section{Software integration patterns \& the definition of related work}
+
+The choice of a license is a decision usually made quite easily, and in most cases the project maintainer succeeds in their goal: Allowing anyone to use their work in ways they define by their choice of license. However, the project maintainer may in turn decide to want to make use of another project themselves in their project. \\
+
+If the piece of code the project maintainer wishes to use is licensed differently, problems can occur. Sometimes these issues become high-profile, especially when large organizations are involved, which signifies the relevance of the mismatch between legal knowledge and software maintaining knowledge~\cite{lkml-tuxcomputers,tuxedocomputers-issue-127,tuxedocomputers-issue-61}.
+
+At this point it is important to take a step back and understand how licenses deal with the action of working forwards on the work of someone else. In summary, this has the following legal grounds:
 \begin{itemize}
-\item Move 1: Establishing a Territory [the situation]
-\item Move 2: Establishing a Niche [the problem]
-\item Move 3: Occupying the Niche [the solution]
+	\item \textbf{U.S. copyright law:} "A “derivative work” is a work based upon one or more preexisting works, such as a translation, musical arrangement, dramatization, fictionalization, motion picture version, sound recording, art reproduction, abridgment, condensation, or any other form in which a work may be recast, transformed, or adapted. A work consisting of editorial revisions, annotations, elaborations, or other modifications which, as a whole, represent an original work of authorship, is a “derivative work”."~\cite{us-copyright-law-definitions}
+	
+	This definition is explicit, and defines the term "derivative work" to signify work that is based on or otherwise derives from existing work from another author. It is important to note the explicit callout that derivative work only applies if the work itself is an original work of authorship.
+	
+	\item \textbf{EU directives:} EU law does not have a specific definition to use, but does use the concept of adaptation and transformation in their law, which applies to the practice of using shared code~\cite{eu-infosoc-directive}.
+	
+	\item \textbf{International treaties:} A document which is relevant internationally in countries that undersigned it is the Berne Convention for the Protection of Literary and Artistic Works. This convention asserts protection for works that are adapted as follows:
+	
+	"Translations, adaptations, arrangements of music and other alterations of a literary or artistic work shall be protected as original works without prejudice to the copyright in the original work."~\cite{berne-convention}
 \end{itemize}
 
+This summary of the legal perspective on deriving from existing works makes clear that there are many different perspectives on how to handle these situations.
 
-We start the introduction with a small contextualization on the thesis/paper subject (i.e. "Move 1").
-This usually takes 1 to 3 paragraphs for a paper depending on the topic. 
-For a thesis, it is ok to write more paragraphs. 
-Please remember, these are just general suggestions.
+\subsection{Application on software}
 
-After the contextualization, we a few paragraph on the problem or motivation for this research  (i.e. "Move 2"). 
-We should reinforce why the problem is important, why it is difficult, or how it affects academia and/or industry. 
+When we examine the specific domain of software however, we can identify two patterns of software integration which hold relevance to software licensing. For brevity, we refer to "the source" as the repository in which code to be derived from is found. We refer to "the target" as the repository in which the derivation will be used.
 
-After we successfully introduced the readers to the contextualization and problem/motivation, comes a paragraph clearly stating what is our research (i.e. "Move 3").
-Usually, this paragraph begins with "In this paper/thesis, we ...".
-Now the reader understands the basics of our research and what we did to accomplish our goals. 
-The remaining paragraphs in the introduction can now describe a summary of the results, how previous research does not tackle what we did/accomplish, state the contributions for the research, or even an illustrative example of how the research improves the problem we described. 
-The final paragraph of the introduction is an outline briefly describing the remaining sections. 
-Use the \textbackslash ref\{...\} command to reference Sections and Chapters. 
-For example, in Chapter~\ref{ch:background}, we describe...
-And in Section~\ref{sec:ConceptA}, we describe...
+\begin{itemize}
+	\item \textbf{Full inclusion:} Whenever a piece of code, even mere lines of code, is taken verbatim from a source and placed into a target, the license of the source continues to hold over that piece of work, but separation between where the application of each license happens may not be very clear. \\
+	
+	Licensing conflicts arise here in the form of grants that the source's license requires, which are not guaranteed by the target license. For example, the GPL's copyleft requirement which requires that deriving work remains licensed under a similar license is therefore not compatible with non-matching licenses in this way.
+	
+	Actions that produce full inclusion are among the following:
+	\begin{itemize}
+		\item Cherry-picking: Either through \verb*|git cherry-pick| or other similar command that transfers a commit or other section of work verbatim into the target repository, this produces a scenario in which work is included from another source.
+		\item Forking: Splitting off from a work as a fork of that work takes the entire work and then allows you to make your work from it. You can choose to license your changes differently, so long as the original license permits this.
+		\item Binary inclusion: Even binary forms of software are protected under the license which holds over the source code, unless that license specifically disclaims it. In this case inclusion of the binary form of the source's code in the target works the same as the above mentioned cases.
+		\item \textbf{Generally:} Any direct inclusion of source material in any form in any form of the target, even when modified, qualifies as a full inclusion, \textbf{so long as separation between the coverage of each license in play is unclear}. It should be noted that it does not matter where the work comes from, whether that be a repository with a clearly posted license, or a website like StackOverflow or other online forum boards and similar. Even if the license there is not immediately clear, you will need permission from the author to use that work in the way you intend to use it.
+	\end{itemize}
+	
+	This aligns with the definition of "derivative works" in U.S. Copyright Law~\cite{us-copyright-law-definitions,license-integration-patterns-1,license-integration-patterns-2,5070520}.
+	
+	\item \textbf{Separated interaction:} Code can rely on other pieces of code in a separated way. In this sense, we primarily mean the interaction pattern of a library as an example. Here it is important to note that the works are fully separate in source code, unless the source code is fully included in the target repository, which would make it a full inclusion. \\
+	
+	This thesis does not examine this pattern in detail, as it is generally less restrictive than the full inclusion pattern. If a license configuration is compatible in the full inclusion pattern, it will also be compatible in this configuration. If it isn't, it may become compatible in this configuration. \\
+	
+	In practice, this pattern arises when any of the following is done:
+	
+	\begin{itemize}
+		\item Dynamic linking of binary forms: The binary forms are separate and can also be delivered separately. For all intents and purposes, they are separate aside from the fact that one cannot function for its intended purpose without the other.
+		\item High-level language dependencies: High level languages such as Java, Python, JavaScript, ... have dependency managers (Maven, Pip, NPM, ...). These allow a developer to define dependencies on libraries declaratively in a file. Automated tooling can read these files and configure the project's dependencies on one's device fully independently. Sometimes this pertains source code, sometimes this pertains binary code. However, for both cases, the source's work is kept fully separate from the target's work and only interacts with it via high-level system calls.
+		\item \textbf{Generally:} Any target work that requires a form of source work to function, but which doesn't need to come bundled with it in any form, as the source work can be obtained separately.
+	\end{itemize}
+	
+	The United States Copyright Act definition which matches the most to this pattern is a "collective work". It is defines as: "a work [...] in which a number of contributions, constituting separate and independent works in themselves are assembled into a collective whole"~\cite{us-copyright-law-definitions,5070520}.
+\end{itemize}
 
-\paragraph{LaTeX / Git tips and tricks}
+It should be noted that in highly collaborative projects, it is quite easy to come into contact with the full inclusion pattern. The separated interaction pattern is ubiquitous, as any form of library usage qualifies. This means that whenever this happens in any way, shape or form, the project maintainer performing said action must be aware of which licenses they interact with. We return to the initial statement that project maintainers are not necessarily well-versed in legal matters and reading legally constructed licenses, which results in a problem.
 
-Citations are very important in academic writing. 
-Try to put at least one citation (preferable more) per paragraph in the introduction's previous paragraphs. 
-Always use a citation when making a strong remark or statement to reinforce the point.
-Example of citation~\cite{demeyer2002}.
-For multiple citations put them all in the same cite command~\cite{vanbladel2020, parsai2020, njima2019, demeyer2002}. 
-And yes, the tilde before the cite command is crucial -- it creates a small non-breaking space between the last word and the citation.
-Remember that citations are annotations, not parts of speech.
-Therefore do not use a citation as a substantive.
+\section{Research statement}
 
-For Git-like repositories, try to put each sentence in a newline. 
-Since Git is line-based, it makes it easier the see changes between versions.
+When we consider the concept of licensing however, we must understand that we are still dealing with natural language. This means we can attempt to apply natural language processing techniques to these licenses to learn properties and induce automated reasoning about licenses, and providing supported advice to project maintainers when handling licensing issues.
 
+This thesis is a feasibility study into one of those techniques using recent advances in large language models (LLMs for short). Specifically, we aim to answer the following questions:
 
-\comment{We also included a comments command which makes it easier for students and advisors to give feedback or ask questions directly on the text. 
-We can hide all comments in the pdf by changing a single line in the main tex file.}
+\begin{itemize}
+	\item \textbf{Research question 1:} Which properties of software licenses are relevant to critically reasoning about combination compatibility?
+	
+	While license texts are composed of various legal elements, it is important to examine whether or not answering the compatibility question depends on all of these elements. If we can define a subset of important properties for correct identification of most software licensing conflicts, we can focus efforts on automatically determining these properties instead of performing complex per-combination reasoning.
+	
+	If these properties exist, this will also assist in allowing actors outside of the legal profession to understand why a specific conflict occurs in a general and understandable sense, as only the property needs to be explained, not the in depth text of the license itself.
+	
+	\item \textbf{Research question 2:} Is it feasible to deploy large language models to determine these properties of a license?
+	
+	If the ground work is laid by answering Research question 1, the next step is to automate it. This thesis examines the option of using large language models to do so, and intends to compare these results against known values. This is the ground truth which we have decided to build on, which will be explained further in Chapter~\ref{ch:related-work}.
+	
+	If automation of this process can be made reliable, existing automated workflows can be amended with this method to further improve license compliance reporting.
+\end{itemize}
