@@ -11,8 +11,4 @@ popd
 
 python3 spdx_download.py
 
-pushd spdx
-
-./download.sh
-
-popd
+./spdx/download_fulltext.sh

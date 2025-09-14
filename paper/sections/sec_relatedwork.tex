@@ -266,7 +266,7 @@ It should also be noted that the OSADL does define each of the terms it uses (wi
 
 In these definitions, we see the three separated elements from the MIT license returning as defined constructs which are defined generally, and thus also applicable to other license models.
 
-\subsection{Detecting copyleft clauses based on a license checklist}
+\subsection{Detecting copyleft clauses based on a license checklist}\label{sec:detect-copyleft-from-license-checklist}
 
 An interesting property of these license checklists is that, while always explicitly mentioned in the supplements section, a copyleft property can also be inferred through the obligations section. We show this property with an example, namely the GPL-1.0-only license.
 
@@ -355,4 +355,121 @@ USE CASE Binary delivery
         ...
 \end{verbatim}
 
-When summarized like this, we see a strict copyleft requirement emerging. Namely, in both delivery use cases, you are required to grant your changes under the original license (\textbf{but not the original copyright notices}). Even more so, in Binary delivery, you are also obligated to provide source code, either immediately or in the form of a written offer valid for 3 years.
+When summarized like this, we see a strict copyleft requirement emerging. Namely, in both delivery use cases, you are required to grant your changes under the original license (\textbf{but not the original copyright notices}). Even more so, in Binary delivery, you are also obligated to provide source code, either immediately or in the form of a written offer valid for 3 years. This last obligation forces you into the Source code delivery use case in both cases, where the copyleft requirement for the source code also holds.
+
+Logically, to comply with the obligations in this checklist which represent the license itself, regardless of what you do, you must provide your derivative work in source code form and optionally binary form under the same license. (But again, not the original copyright notices.)
+
+\section{Notable use cases}
+
+Before we continue with other ground truth data sources the OSADL provides, we take a moment to consider the other noteworthy use cases the OSADL defines and uses in their license checklists. For clarity, these are the "arguments" to a USE CASE statement in the checklist.
+
+First, we recall that we already identified what "Source code delivery" and "Binary delivery" means. With this in mind, the following terms of interest remain:
+
+\begin{itemize}
+	\item \textbf{X delivery Of Combined library:} The OSADL defines a Combined library as follows: "If two or more libraries are copied into a single library that offers the functionality of the library components all together, but without applying any modifications to them, then the resulting library is referred to as a Combined library."
+	
+	As a result, delivery (both binary and source code) of such a work fall under this work, and are used in the LGPL-family of licenses. This family is a non-strict copyleft license, and as such mentions libraries explicitly.
+	
+	\item \textbf{X delivery of Combined work:} Likewise, the OSADL provides the following definition for the term Combined work: "A Combined work is created when a work consists of two or more originally separated components that are combined in such a way that they form a new work no longer allowing them to operate independently."
+	
+	This has a similar implication, but is more general on one hand, not limiting itself to libraries, but also more specific in the sense that the work must not be able to be separated as a result. Regrettably, which functions are used as a benchmark to determine this treshold of functionality is left rather vague. We see this use case also used by the LGPL family of licenses.
+	
+	\item \textbf{Combined work delivery:} The Sleepycat license is the only license to use this use case, and it does so to enforce the copyleft property on what the OSADL defines as a Combined work (see the bullet point above). In this use case, one is required to either include the source code in the combined work, or to provide delayed source code delivery of combined work for no profit, similarly to the GPL-1.0-only example previously handled. Note however that this license does not define a time window in which this delayed delivery must be performed. We will return to the Sleepycat license later, as it appears to be a difficult license to work with in particular.
+	
+	\item \textbf{Binary delivery of Linked work:} The OSADL defines a Linked work as: "A work may be linked to another work at compile time or at run time in which case the other work is referred to as Linked work."
+	
+	Examples of this arise in any programming language when one uses a library in their code without including the library itself as a baked-in option. (For example, \texttt{requirements.txt} for Python, module imports for Go, classpath linking for Java using Maven or Gradle, or any other pattern in which the dependencies of a project are described in a declarative way, based on which automated tooling can independently retrieve the library files needed itself.) The \textbf{library} is the linked work.
+	
+	This has a variant, namely \textbf{Binary delivery of Linked work With Header files OF Library Included In Linked work}. \comment{Victor: What in the world does this mean? The linked work IS the library. It includes its own header files?}
+	
+	Once again, the LGPL family uses these terms explicitly. It is also used by the Artistic-2.0 license.
+	
+	\item \textbf{Font, Image, Work, ... delivery:} The delivery word can be used with a number of various other terms, indicating that the license in question covers this "type" of work separately.
+	
+	These terms are used by more general licenses that don't specifically cover code, like the CC family of licenses. However, we also see these elements appearing in the Bitstream-Vera and the OFL-1.1 license.
+	
+	As the term "Work" is very general, we call out its OSADL definition explicitly to clarify it: "Copyright law specifies a Work as any artifact that was created by a human being, can be perceived by a human being and possesses individual characteristics that are attributable to a human being. In the context of software licensing, the term Work is used to denote a collection of software components that are conveyed as a whole under the same license or, if compatible, under the same group of applicable licenses."
+	
+	\item \textbf{Network service:} This does not constitute delivery in the traditional sense, rather, the OSADL defines it as follows: "The term Network service is used to describe a situation when a provider does not convey a software application in binary form to a customer, but installs it on a network-capable computer and let customers use the application by communicating with it via a network link."
+	
+	This use case is outlined explicitly by the AGPL family of licenses, which is known for specifically differing from the GPL family of licenses because it covers the "network service loophole". This use case is also explicitly covered by the AFL-3.0 and the OFL-3.0. It should be noted that this use case is generally understood not to be covered by any variation of the term "Derivative work" in copyright law, as one is using the work themselves and in doing so, is providing a different service to the end users.
+\end{itemize}
+
+\section{Copyleft table}
+
+Aside from the now examined license compliance checklists, the OSADL makes available a distilled source of information. Namely, a table that lists the copyleft status of each of the licenses in the raw data. It should be noted that while the licenses themselves list the copyleft property in their license checklist supplements, this table is actually more specific.
+
+This is because this table goes deeper than a yes/no answer. Namely, it lists the following possibilities:
+
+\begin{itemize}
+	\item \textbf{No:} Licenses with this classification are permissive.
+	\item \textbf{Yes:} Licenses with this classification are Strict Copyleft family.
+	\item \textbf{Yes (restricted):} Licenses with this classification are in the Copyleft Limited family.
+	\item \textbf{Questionable:} This classification is used for two licenses, namely the MS-PL and OpenSSL licenses. We examine the license checklist of each of these separately, using the process outlined in Heading~\ref{sec:detect-copyleft-from-license-checklist} to classify these licenses ourselves.
+	
+	\comment{Victor: Fill this in.}
+\end{itemize}
+
+\section{Compatibility matrix}
+
+Based on these license checklists, we can consider a situation in which two license checklists are checked against eachother, one in a leading position and the other in a subordinate context. This context is derived from the context of an individual license checklist. Recall, that a license checklist itself is made in the context of the licensed work being included in another work, without specifying what the other work is licensed under.
+
+In this section, we examine the situation that occurs when we do know what the including work is licensed as. In this sense, we define the leading license as the license that governs the including work. The work that is being included, in part or in full, is governed under the subordinate license. \\
+
+This construction is a construction that the OSADL has already examined for a lot of the licenses it covers. It provides the raw data of these experiments, which are still the result of human curation, as a matrix which we can examine. In this matrix, we have the following types of results:
+
+\begin{itemize}
+	\item \textbf{Yes:} This result indicates that the obligations imposed by both licenses do not conflict. However, the combined work still must abide by both licenses' obligations. As such, this compatibility is only theoretical, not practical.
+	\item \textbf{No:} This result indicates incompatibility. This means there is some obligation combination that causes problems when applied.
+	
+	As we will see, the copyleft property of a license is an important thing to know here. For instance, if the leading license is permissive, and the subordinate license is copyleft in any way, then by definition the combination cannot be compatible. This is because the combination would become a derivative work of the copyleft licensed work, thus requiring it as a whole to be similarly licensed.
+	\item \textbf{Check dependency:} A third option is what the OSADL defines as Depending compatibility. This is a combination of two licenses in the context previously discussed, which in the definition of the two participating licenses is incompatible. However, either one of the licenses allows it to be replaced at any time with another license it specifies, usually a newer version of the same license, which does make the combination compatible. These cases are rare, and are flagged separately. As an example, an LGPL license can generally be upgraded into its GPL variant, dropping the special provisions surrounding linking. LGPL licenses are not compatible with GPL licenses, but naturally GPL licenses are compatible with themselves.
+	
+	\item \textbf{Unknown:} Not all license combinations were evaluated by the OSADL. In this case, the field is listed as this value.
+\end{itemize}
+
+\subsection{Identifying clusters of interest}
+
+Given the ground truth information in this compatibility matrix, it is useful to examine which information we need to correctly classify most of license combinations within it. This will in turn allow us to perform automated querying for licenses in a smart way, without having to resort to the infeasible per-combination query behavior. By means of a spreadsheet which we add specific columns to, we can attempt to identify useful classes of interest.
+
+If we make this spreadsheet with one row for each combination, and add two columns indicating the OSADL-provided copyleft license table entry for the leading and the subordinate license, we can already make some important distinctions:
+
+\begin{enumerate}
+	\item \textbf{Permissive-X} (9775 / 13340)\textbf{:} When the leading license is permissive (= No in the copyleft table), it is immediately obvious that we can produce an accurate decision if we know the copyleft state of the subordinate license. Namely, if it is permissive, the combination is always compatible. If it is any form of copyleft, it is always incompatible. If the subordinate license is classed as Questionable, the result is unfortunately always unknown. Aside from this, this class does not have any Unknown classifications.
+	
+	In numbers, we see this class containing the following results:
+	
+	\begin{table}[h]
+		\caption{Table for Permissive-X compatibility class}
+		\label{tab:permissive-x-table}
+		\centering
+		\begin{tabular}{|cc|cc|c|}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Permissive-Permissive}} & \multicolumn{2}{|c|}{\textbf{Permissive-CopyleftAny}} & \textbf{Permissive-Questionable} \\
+			Yes & Unknown & No & Unknown & Unknown \\
+			7140 & 0 & 2465 & 0 & 170 \\\hline
+			\multicolumn{5}{|c|}{9775 total combinations (out of 13340 $\sim$ 73.276\%)} \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\item \textbf{CopyleftAny-Permissive} (2465 / 13340)\textbf{:} When the leading license is copyleft, and the subordinate license is permissive, generally, we expect the combination to be compatible unless there is some specific cause for it not to be. This is because permissive licenses are generally permissive in how the work covered under them are used, and thus any conflicts should arise from the copyleft leading license disallowing something that the permissive license still requires in terms of material reproduction. This is supported by the number of records in each category, provided as follows:
+	
+	\begin{table}[h]
+		\caption{Table for Copyleft-Permissive compatibility class}
+		\label{tab:copyleft-permissive-table}
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\multicolumn{3}{|c|}{\textbf{CopyleftAny-Permissive}} \\
+			Yes & No & Unknown \\
+			1498 ($\sim$ 60.993\%) & 231 ($\sim$ 9.493\%) & 736 ($\sim$ 29.858\%) \\\hline
+			\multicolumn{3}{|c|}{2465 total combinations (out of 13340 $\sim$ 18.2478\%)} \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\item \textbf{CopyleftAny-CopyleftAny} (812 / 13340)\textbf{:} Y/N/CheckDep
+	
+	\item \textbf{CopyleftAny-Questionable} (58 / 13340)\textbf{:} Unknown/N
+\end{enumerate}
