@@ -2,221 +2,6 @@
 
 \chapter{State-of-the-art: OSADL}\label{ch:related-work}
 
-\comment{Victor: This chapter contains a lot of uncurated work, and the order or relevance of everything presented is not yet fixed in place. Here be dragons.}
-
-The Open Source Automation Development Lab (OSADL) is a collaborative project that supports and promotes the use of open-source software, particularly Linux, in industrial and automation environments. OSADL focuses on ensuring that Linux and other open-source software components meet the stringent requirements of industrial applications, including real-time capabilities, legal compliance, and long-term maintenance.
-
-Among the key activities of the OSADL organisation, \textbf{license compliance} is a dedicated subject it examines. OSADL helps member companies ensure their use of open-source software complies with licensing obligations by providing tools and services for legal audits and documentation that go deeper than those listed in Chapter~\ref{ch:background}~\cite{osadl-home}. \\
-
-This aspect of the OSADL organisation is very interesting for this thesis, as it provides this dataset to the public for analysis and automated interaction. We will examine each of the relevant components.
-
-\section{OSADL License Checklists}
-
-The OSADL organization describes this project as follows: "Whenever Open Source software is copied and distributed which typically is permitted by every type of Open Source license, a number of obligations and prohibitions are imposed on the distributor. It is very common for the recipients of such software to recursively redistribute it in such a way that a chain of distributors and recipients is created – all of them having to fulfill the same license obligations. However, for the time being, there is no common understanding of how these obligations are to be fulfilled in detail which regularly leads to misunderstandings, conflicts and sometimes even to court cases.
-
-This project is launched with the goal to generally establish checklists of obligations of commonly used Open Source software that are accepted by distributors and copyright holders and trusted by all members of the distribution chain."~\cite{osadl-license-checklists}
-
-This description is executed by creating license checklists at the request of its members for specific licenses. These checklists provide an overview of all the obligations someone who wishes to use work licensed under it must fulfill, in a standardized way. For this, it uses several building blocks which we describe below. It should be noted that all raw data for each component is publicly available, and downloading this can be automated.
-
-While it is possible that a checklist is formatted in a JSON format, and OSADL publishes a schema to validate against for these objects, we use the text format for explaining its workings in this thesis. \\
-
-It is important to frame the checklists in the scope in which they are provided, quoted directly from the OSADL project page: "The checklists assume a situation where a licensee of Open Source software incorporates such software components into a product - either a physical device with installed software or a software distribution on a storage medium or on the Internet - and needs to establish appropriate processes in order to fulfill the imposed license obligations for legal compliance when conveying the product to customers."~\cite{osadl-license-checklists-scope}
-
-This maps directly to the Full inclusion integration pattern we discussed in Chapter~\ref{ch:introduction}, limiting the use in particular to re-use of code and modification, as well as redistributing the completed result in some way.
-
-\subsection{Checklist language}
-
-Language used for checklists is fixed. It uses only defined terms, which sometimes allow freeform input (for example license names). These language constructs are separated into three main categories:
-
-\begin{itemize}
-	\item \textbf{Language elements:} Core elements of language that convey a particular meaning. These elements appear inspired by the language definitions used for RFC documents, as provided in RFC 2119. This inspiration however is not publicly cited on the web page. These elements include, but are not limited to, terms such as YOU MUST, YOU MUST NOT, USE CASE, ... . Notably, the OSADL authors have chosen to make these elements all uppercase to allow them to be distinguished easily.
-	\item \textbf{Actions:} These elements are usually verbs, and are usually, but not always, what follows a language element in a provision. A couple of examples include terms such as: Publish, Provide, Add, Append, ... .
-	\item \textbf{Terms:} These elements follow usually follow an action in provisions. This is the largest set of defined elements among these categories.
-\end{itemize}
-
-In effect, these allow us to write obligations in near-English sentences. For example, everyone understands "YOU MUST Provide License text" to mean just that, the requirement to provide the license's text if you use the covered work. How exactly these statements interact with each other is what we will cover next.
-
-\subsection{Format description}
-
-\subsubsection{Example: The MIT license}
-
-To explain how the format works, we explain this by referring to an example checklist of the MIT license. That is provided verbatim in text form as follows.
-
-\begin{verbatim}
-	USE CASE Source code delivery OR Binary delivery
-		YOU MUST Provide Copyright notices
-		YOU MUST Provide License text
-		YOU MUST Provide Warranty disclaimer
-\end{verbatim}
-
-We refer back to the MIT license text which was included in Chapter~\ref{ch:introduction}. Let's pick this checklist expression apart by listing all used definitions first, taking them verbatim from the dataset OSADL provides:
-
-\begin{itemize}
-	\item \textbf{USE CASE:} Sometimes the license obligations may allow the distributor to freely select between a number of optional use cases; the USE CASE language construct is introduced for this purpose. Several USE CASE language constructs to which the same license conditions apply may be combined using the OR language construct. If a particular USE CASE is mentioned repeatedly, e.g. once along with another USE CASE and once not, the obligations of all USE CASE sections must be fulfilled.
-	\item \textbf{YOU MUST:} The YOU MUST language construct specifies an individual license obligation, i.e. what to do, probably among other things, to become license compliant. It may optionally be followed by indented language constructs such as ATTRIBUTE that further describe the license obligation.
-	\item \textbf{OR:} When the OR language construct is used between elements of a condition, then the condition already applies, if only one element is fulfilled. When the OR language construct is used between obligations, then it is sufficient to fulfill at least one obligation. Note: The AND language construct is assumed by default between consecutive license obligations and attributes.
-	\item \textbf{Provide:} The action to Provide means to make available particular material such as a license text to another natural or legal person. While the action to Forward is restricted to conveying existing material, the action to Provide expands the meaning in the sense that the material may be newly generated as long as it fulfills its purpose.
-	\item \textbf{Source code delivery:} Licenses may treat the various aggregate states of deliverable software such as source, intermediate and object code differently. The term Source code delivery denotes a situation where source code is delivered, and no software component is included in the delivery without corresponding source code.
-	\item \textbf{Binary delivery:} A software distribution may contain material not in a human-readable programming language, but in binary machine or intermediate code that was generated from the project's source code using a compiler. Some licenses may then impose disclosure obligations that may be fulfilled either by delivering the corresponding source code along with the binary code or by offering to do so at a later date. Irrespective of whether disclosure obligations exist and how they must be fulfilled, when software is delivered at least partly in object form then this is referred to as Binary delivery.
-	\item \textbf{Copyright notice:} The Copyright notice indicates the name of the holder of the exclusive usage rights. In its minimal form, it may only contain a name in an obvious context. Usually, however, the name of the holder of the exclusive usage rights is preceded by the word 'Copyright', the © symbol or the letter c in parentheses '(c)', and a number or several numbers that indicate the year when the work was created." If the author is not the holder of the exclusive usage rights, the name of the holder of the exclusive usage rights may be followed by an attribution to the author.
-	\item \textbf{License text:} The term License text denotes the unabbreviated original text of a particular license in its original language. It may either be printed on paper or contained in a data file on a medium using an obvious and well-known or an individually defined and specified character encoding.
-	\item \textbf{Warranty disclaimer:} The license text may contain a clause or several clauses where the original authors refuse any warranty for malfunction or damages that may occur when using the licensed software. Such section is referred to as Warranty disclaimer.
-\end{itemize}
-
-With these definitions provided, we can pick apart the checklist line by line.
-
-\begin{itemize}
-	\item \verb*|USE CASE Source code delivery OR Binary delivery|: The subordinate elements of this checklist apply when distributing source code or binary forms of a project which is, in full or in part, subject to the terms of the license this checklist was made for.
-	\item \verb*|YOU MUST Provide Copyright notices|: In these use cases, you are required to provide the copyright notice.
-	\item \verb*|YOU MUST Provide License text|: You must also provide the unaltered license text.
-	\item \verb*|YOU MUST Provide Warranty disclaimer|: And finally, you must provide the warranty disclaimer.
-\end{itemize}
-
-Thus, this checklist tells us exactly what we need to do when we want to redistribute work licensed under the MIT license in any code-bound form. Complying with all three requirements is as simple as including the full text of the original license, which includes the copyright notices (first line of the license) and the warranty disclaimer (last paragraph of the license in capitals).
-
-This explanation aligns with our explanation in Chapter~\ref{ch:introduction} about how the MIT license works, and demonstrates how the format works. \\
-
-\subsubsection{Formal definition}
-
-The OSADL project also defines this format formally, where it is split in two sections. The first section of the format is displayed in the example, and contains these checklist items. We call this the primary section.
-
-\comment{Victor: Fix this section. What is the goal?}
-
-
-\subsection{Detecting license family based on a checklist}
-
-OSADL also provides insight into how to determine the license family of a license. We recall from Chapter~\ref{ch:background} that this thesis considers each license to be part of one of two families: Permissive, or copyleft to any degree.
-
-\comment{Victor: Fix this section as well.}
-
-\begin{verbatim}
-	USE CASE Source code delivery
-		YOU MUST Provide License text
-		YOU MUST NOT Modify Copyright notices
-		IF Software modification
-			YOU MUST Grant License
-				ATTRIBUTE Original license
-			YOU MUST Provide Copyright notices
-		IF Commercial distribution
-			YOU MUST Indemnify Other contributors
-	USE CASE Binary delivery
-		YOU MUST NOT Modify Copyright notices
-		EITHER
-			YOU MUST Provide Source code
-		OR
-			YOU MUST Provide Delayed source code delivery
-				ATTRIBUTE Inform Recipient
-			EITHER
-				ATTRIBUTE Customary medium
-			OR
-				ATTRIBUTE Via Internet
-				ATTRIBUTE Reasonable
-		IF License change
-			YOU MUST Use Identical License obligations
-			YOU MUST Use Warranty disclaimer On behalf of Other contributors
-				ATTRIBUTE Effective
-			YOU MUST Use Liability disclaimer On behalf of Other contributors
-				ATTRIBUTE Effective
-			IF Service offerings
-				ATTRIBUTE NOT Transferable
-		IF Commercial distribution
-			YOU MUST Indemnify Other contributors
-\end{verbatim}
-
-\subsection{Copyleft table}
-
-OSADL also provides a JSON table that indicates for each license whether or not it has a copyleft clause. This value can be one of the following:
-
-\begin{itemize}
-	\item \textbf{Yes:} This indicates the license is part of the Copyleft Strict license family.
-	\item \textbf{Yes (restricted):} This also logically implies the license is part of the Copyleft Limited license sub-family. Together with the licenses tagged Yes, this forms the full Copyleft license family.
-	\item \textbf{No:} This maps to the permissive license family.
-	\item \textbf{Questionable:} This final result implies that OSADL cannot come to a consensus on the presence of a copyleft clause in the license, thus implying that no general consensus exists. At the time of writing, this is assigned to the MS-PL and OpenSSL licenses in the dataset.
-\end{itemize}
-
-\subsection{Compatibility matrix}
-
-OSADL also provides a curated matrix of compatibility between licenses, based on their checklists. This matrix is an aggregate product of the data elements and is therefore not new. The way these decisions are made however is not clearly documented.
-
-Before we look into the specifics of this matrix, as it allows us to draw some valuable conclusions already, it is important to recall the scope in which the license checklists, which this matrix was based on, are constructed. This context was given earlier in this chapter.
-
-Important definitions that result from combining two of these licenses in the scope of a compatibility question are the following:
-\begin{itemize}
-	\item \textbf{Leading license:} This is the license of the project that is the target of the inclusion. Code from the subordinate will end up in the project under this license.
-	\item \textbf{Subordinate license:} This is the license that covers the code that is being taken.
-\end{itemize}
-
-To conclude, a compatibility result in the compatibility matrix provided by OSADL references a situation where one incorporates a part of the subordinate project into a leading project, and where the licenses of both projects are individual. This is still a case of the full inclusion pattern. \\
-
-A compatibility result is either Yes, No, Unknown or Check Dependency. The first three are clear, but the Check dependency result needs to be clarified. OSADL introduces the concept of depending compatibility which defines that two licences are indeed incompatible, but allow a change to be made to the license configuration to make them compatible. This is to be read explicitly as: The configuration itself is \textbf{incompatible}, but one or both of the licenses allow themselves to be changed out for another license \textbf{explicitly} which does result in a compatible scenario.
-
-\subsubsection{Expressing percentages}
-
-In total, the dataset contains $116$ licenses, which results in $13456$ total combinations. However, we are only interested in $13340$ of these combinations, as $116$ of them are licenses being compared with themselves. These combinations are always compatible, and OSADL reports them as "Same." for this reason.
-
-Looking further, we see that $1020$ of the combinations are listed as "Unknown". This leaves us with $12320$ assessed combinations of which:
-
-\begin{itemize}
-	\item $8812$ ($\sim 71.53\%$) are compatible.
-	\item $3448$ ($\sim 27.99\%$) are not compatible.
-	\item $60$ ($\sim 0.48\%$) fall in the case of depending compatibility.
-\end{itemize}
-
-An interesting finding arises when we combine this with the copyleft table, mapping "Yes" and "Yes (restricted)" to Copyleft, and "No" to Permissive. These results are shown below:
-
-\begin{table}[h]
-	\caption{OSADL compatibility in a copyleft-oriented view.}
-	\label{tab:osadl-compat-numbers}
-	\centering
-	\begin{tabular}{l|ll}
-		\hline
-		\textbf{Subordinate \textbackslash Leading} & \textbf{Copyleft} & \textbf{Permissive} \\ \hline
-		\textbf{Copyleft} & 812 total, 75 yes, 60 check dependency, 677 no & All 2465 no \\
-		\textbf{Permissive} & 1729 total, 1498 yes, 231 no & All 7140 yes \\\hline
-	\end{tabular}
-\end{table}
-
-This table shows a powerful property: If the leading license is permissive, we only need to know the license family of the subordinate license to be able to assess compatibility. \textbf{We conclude already that the license family is an important license property to automatically determine compatibility as part of the answer to RQ 1.}
-
-Additionally, we see that a Copyleft/Copyleft combination is primarily incompatible, with some edge cases. These are always cases where the license lists licenses it is explicitly compatible with. For example, GPL-1.0-or-later is compatible with all future versions of the license by definition. (But not the other way around! Compatibility is a one-way relationship.)
-
-Lastly, we observe that Copyleft/Permissive combinations are primarily compatible, but a not insignificant portion of combinations are incompatible. \\
-
-To conclude this section, we can now make the powerful claim that if we know the license family a two licenses belong to, we can already answer $\sim 78.67\%$ of combinations, i.e. those where the leading license is permissive.
-
-\section{Inducing the Permissive Leading effect logically}
-
-In this last section, we present a logical argument as to why a permissive leading license allows for direct classification of combinations based on the license family the subordinate license belongs to. To do this, we consider the following definitions by OSADL: \comment{Victor: These need to be moved earlier. Also this needs to be argued about why these are disjoint.}
-\begin{enumerate}
-	\item \textbf{Compatibility is assumed, if:}
-	\begin{itemize}
-		\item compatibility with the other license is explicitly ruled in a particular license, or
-		\item the two licenses in question both do not contain a copyleft clause, or
-		\item the leading license contains a copyleft clause and the other license does not and also does nto impose any obligation that the first license does not allow to impose.
-	\end{itemize}
-	
-	\item \textbf{Incompatibility is assumed, if:}
-	\begin{itemize}
-		\item incompatibility with another license is explicitly ruled in a particular license, or
-		\item one license imposes an obligation that the other license does not allow to impose, or
-		\item the two licenses in question both contain a copyleft clause and no license contains an explicit compatibility clause for this license combination.
-	\end{itemize}
-\end{enumerate}
-
-These definitions already directly indicate why Permissive/Permissive is always compatible, namely it is defined as option 2 of OSADL's definition of compatibility. \\
-
-This only leaves us to clarify why Permissive/Copyleft results in incompatible combinations at all times. To do this, we need to argue that these combinations always meet at least one of the three criteria for incompatibility.
-
-To do this, we first recall what it means for a license to be in the copyleft license family: This means derivative works based on the covered work must be licensed equally in the strict case, or similarly in the limited case.
-\begin{itemize}
-	\item In the strict case, we land in bullet point two of incompatibility immediately. As we are trying to license the derivative work differently from the subordinate license.
-	\item In the limited case, the same bullet point is reached as generally, the conditions under which the copyleft requirement may be waived do not include the full inclusion pattern. Alternatively, if the license is Copyleft Limited because it allows a specific subset of licenses to be used, we observe that these other licenses are also all in the Copyleft family, thus reverting to the base case in this bullet point.
-\end{itemize}
-
-As such, it is only logical that attempting to incorporate work licensed under a copyleft license using full inclusion in a work that is licensed under a permissive license creates an incompatible construction.
-
-\chapter{New Ch3}
-
 The Open Source Automation Development Lab (OSADL) is a collaborative project that supports and promotes the use of open-source software, particularly Linux, in industrial and automation environments. OSADL focuses on ensuring that Linux and other open-source software components meet the stringent requirements of industrial applications, including real-time capabilities, legal compliance, and long-term maintenance.
 
 Among these key activities of the OSADL, \textbf{open source license compliance} is a key area it provides support in to its members. It does this in a number of ways that are of great interest for this thesis, with the goal of helping member companies and organizations in complying with obligations imposed by open source licensing and the way it interacts with their work. These tools it develops go a lot deeper than what the projects listed in Chapter~\ref{ch:background} aim to accomplish in certain areas~\cite{osadl-home}.
@@ -469,7 +254,23 @@ If we make this spreadsheet with one row for each combination, and add two colum
 		\end{tabular}
 	\end{table}
 	
-	\item \textbf{CopyleftAny-CopyleftAny} (812 / 13340)\textbf{:} Y/N/CheckDep
+	\item \textbf{CopyleftAny-CopyleftAny} (812 / 13340)\textbf{:} This compatibility class is intuitively the hardest to predict. This is because the copyleft property has correctly caused many of the conflicts in the matrix, but we must also recall the fact that certain licenses are defined to be compatible with another license regardless in their license text. This is true in for example versioned licenses, where an old license can be upgraded to a newer version of the same license. This versioned license pattern is exclusive to licenses the OSADL deems copyleft.
+	
+	Recall also the introduction of the depending compatibility definition, which we expect to see as well in this case.
+	
+	\begin{table}[h]
+		\caption{Table for Copyleft-Permissive compatibility class}
+		\label{tab:copyleft-copyleft-table}
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\multicolumn{3}{|c|}{\textbf{CopyleftAny-CopyleftAny}} \\
+			Yes & No & Check dep. \\
+			75 ($\sim$ 9.236\%) & 677 ($\sim$ 83.374\%) & 60 ($\sim$ 7.389\%) \\\hline
+			\multicolumn{3}{|c|}{812 total combinations (out of 13340 $\sim$ 6.0870\%)} \\
+			\hline
+		\end{tabular}
+	\end{table}
 	
 	\item \textbf{CopyleftAny-Questionable} (58 / 13340)\textbf{:} Unknown/N
 \end{enumerate}
