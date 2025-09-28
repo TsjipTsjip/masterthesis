@@ -2,14 +2,26 @@
 
 \chapter{Method / Experimental Design}\label{ch:method}
 
+\comment{!UNFINISHED CHAPTER! Here be dragons.}
+
+For this thesis, we will be interfacing with large language models through the Ollama tool. We've selected this tool as we've found it to be very easy to use, providing a simple way to download models and subsequently querying them manually, or through an API which we can use in our reproduction package to automate certain tasks in obtaining our results~\cite{ollama_docs}.
+
+For our methods proposed, we will perform this method on multiple LLM's to gauge their aptitude, and potentially also identify characteristics that an LLM should have to be able to give mostly correct answers. Where possible, we will aim for high decision accuracy on the question: Is a given combination of two licenses, where one is the leading license and the other the subordinate license, generally compatible? We do this to be able to dynamically construct a matrix in the same format of the license compatibility matrix provided by the OSADL.
+
 \section{LLM selection}
 
-\comment{Victor: Describe what OLLama is. Describe why each model was chosen.}
+For this thesis, we examine the LLM's outlined below. A general selection criterion was their availability. If an LLM is not openly available to run offline (with necessary preceeding downloads allowed), it is not the subject of this thesis as the goal is to provide a method that is open, and which anyone coming across the project could run on their own.
 
-For this thesis, we will be interfacing with large language models through the Ollama tool. We've selected this tool as we've found it to be very easy to use, providing a simple way to download models and subsequently querying them manually, or through an API which we can use in our reproduction package to automate certain tasks in obtaining our results.
+Aside from this criterion, we also clarify specific reasons for choosing a specific model as follows:
+\begin{itemize}
+	\item \textbf{Llama3:} A model which is indicated as being lightweight and general-purpose~\cite{ollama_llama3}.
+	\item \textbf{Gemma3:} \cite{ollama_gemma3}
+	\item \textbf{Deepseek R1:} \cite{ollama_deepseekr1}
+	\item \textbf{Qwen3:} \cite{ollama_qwen3}
+\end{itemize}
 
 
- 
+
 \section{Important property: Copyleft clause presence}
 
 We call back to Chapter~\ref{ch:related-work}, where we determined the presence of a copyleft clause, and thus the license family to which a license belongs, as an incredibly powerful indicator for determining further license configuration compatibilities. To put this into practice, a proof of concept is proposed for an experiment to determine a license's family using the license text, a pre-composed query and one of the selected models. We will evaluate this using accuracy, with our ground truth values being taken from the OSADL copyleft table.

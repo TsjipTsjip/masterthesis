@@ -3,44 +3,44 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Victorvan Herel2025_Thesis.aux
 The style file: unsrt.bst
 Database file #1: references.bib
-You've used 25 entries,
+You've used 30 entries,
             1791 wiz_defined-function locations,
-            547 strings with 7159 characters,
-and the built_in function-call counts, 3273 in all, are:
-= -- 297
-> -- 61
+            565 strings with 7630 characters,
+and the built_in function-call counts, 3818 in all, are:
+= -- 347
+> -- 66
 < -- 1
-+ -- 36
++ -- 41
 - -- 11
 * -- 51
-:= -- 398
-add.period$ -- 78
-call.type$ -- 25
-change.case$ -- 25
+:= -- 453
+add.period$ -- 93
+call.type$ -- 30
+change.case$ -- 30
 chr.to.int$ -- 0
-cite$ -- 25
-duplicate$ -- 145
-empty$ -- 477
+cite$ -- 30
+duplicate$ -- 170
+empty$ -- 567
 format.name$ -- 11
-if$ -- 830
+if$ -- 975
 int.to.chr$ -- 0
-int.to.str$ -- 25
+int.to.str$ -- 30
 missing$ -- 2
-newline$ -- 131
+newline$ -- 156
 num.names$ -- 7
-pop$ -- 181
+pop$ -- 221
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 88
+skip$ -- 103
 stack$ -- 0
 substring$ -- 53
-swap$ -- 35
+swap$ -- 40
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
 while$ -- 11
-width$ -- 27
-write$ -- 240
+width$ -- 32
+write$ -- 285

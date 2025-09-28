@@ -2,6 +2,8 @@
 
 \chapter{State-of-the-art: OSADL}\label{ch:related-work}
 
+\comment{Victor: The entirety of this chapter rests on OSADL sources. Do I need to reference this in a special way, or simply every paragraph?}
+
 The Open Source Automation Development Lab (OSADL) is a collaborative project that supports and promotes the use of open-source software, particularly Linux, in industrial and automation environments. OSADL focuses on ensuring that Linux and other open-source software components meet the stringent requirements of industrial applications, including real-time capabilities, legal compliance, and long-term maintenance.
 
 Among these key activities of the OSADL, \textbf{open source license compliance} is a key area it provides support in to its members. It does this in a number of ways that are of great interest for this thesis, with the goal of helping member companies and organizations in complying with obligations imposed by open source licensing and the way it interacts with their work. These tools it develops go a lot deeper than what the projects listed in Chapter~\ref{ch:background} aim to accomplish in certain areas~\cite{osadl-home}.
@@ -190,9 +192,9 @@ This is because this table goes deeper than a yes/no answer. Namely, it lists th
 	\item \textbf{No:} Licenses with this classification are permissive.
 	\item \textbf{Yes:} Licenses with this classification are Strict Copyleft family.
 	\item \textbf{Yes (restricted):} Licenses with this classification are in the Copyleft Limited family.
-	\item \textbf{Questionable:} This classification is used for two licenses, namely the MS-PL and OpenSSL licenses. We examine the license checklist of each of these separately, using the process outlined in Heading~\ref{sec:detect-copyleft-from-license-checklist} to classify these licenses ourselves.
+	\item \textbf{Questionable:} This classification is used for two licenses, namely the MS-PL and OpenSSL licenses. As these licenses are not entirely clear in their copyleft state, and their interactions with other licenses are generally not defined, this thesis will not use these licenses and any information derived from them as ground truth.
 	
-	\comment{Victor: Fill this in.}
+	\comment{Victor: Consider explaining the interpretation of these licenses separately in an annex-ish section.}
 \end{itemize}
 
 \section{Compatibility matrix}
@@ -213,9 +215,86 @@ This construction is a construction that the OSADL has already examined for a lo
 	\item \textbf{Unknown:} Not all license combinations were evaluated by the OSADL. In this case, the field is listed as this value.
 \end{itemize}
 
-\subsection{Identifying clusters of interest}
+\subsection{OSADL definition of (in)compatibility}
 
-Given the ground truth information in this compatibility matrix, it is useful to examine which information we need to correctly classify most of license combinations within it. This will in turn allow us to perform automated querying for licenses in a smart way, without having to resort to the infeasible per-combination query behavior. By means of a spreadsheet which we add specific columns to, we can attempt to identify useful classes of interest.
+Given these possible classifications, it is useful to tie this into the OSADL's definitions of compatibility and incompatibility. Shown below are both definitions, copied verbatim:
+
+\begin{itemize}
+	\item \textbf{Compatibility:} Compatibility is assumed if:
+	\begin{enumerate}
+		\item compatibility with the other license is explicitly ruled in a particular license, or
+		\item the two licenses in question both do not contain a copyleft clause, or
+		\item the leading license contains a copyleft clause and the other license does not and also does not impose any obligation that the first license does not allow to impose.
+	\end{enumerate}
+	
+	\item \textbf{Incompatibility:} Incompatibility is assumed if:
+	\begin{enumerate}
+		\item incompatibility with another license is explicitly ruled in a particular license, or
+		\item one license imposes an obligation that the other license does not allow to impose, or
+		\item the two licenses in question both contain a copyleft clause and no license contains an explicit compatibility clause for this license combination.
+	\end{enumerate}
+\end{itemize}
+
+It should be noted that the OSADL presents these clauses as an unordered list. For our purposes however, we numbered these lists such that we can refer to C1, C2 and C3 as the compatibility cases, and I1, I2 and I3 as the incompatibility cases. We introduce this naming, such that we can answer the following question:
+
+An interesting point to examine is whether or not:
+\begin{enumerate}
+	\item All license combinations are covered by these definitions. (Completeness property)
+	\item A given license combination belongs in at most one definition, either Compatibility or Incompatibility. (Mutual exclusion property)
+\end{enumerate}
+
+To prove the first question, we present a logical induction. Firstly, we use the presence of a copyleft clause. On this, it can be stated that a license either has one, or not. This is a property that holds true for any given license. With this property, we have enough information to classify each category verbosely, presenting a combination as LeadingLicenseCategory-CopyleftLicenseCategory:
+
+\begin{itemize}
+	\item Permissive-Permissive: Compatible by C2.
+	\item Permissive-Copyleft: Incompatible by I2, namely, when code licensed under a copyleft license is reused, it must be similarly licensed. This is never true in a project that uses a permissive license.
+	\item Copyleft-Permissive:
+	\begin{itemize}
+		\item Incompatible obligations imposed by subordinate license (permissive): Incompatible by I2.
+		\item No such obligations imposed: Compatible by C3.
+	\end{itemize}
+	\item Copyleft-Copyleft:
+	\begin{itemize}
+		\item Explicit compatibility ruled: Compatible by C1.
+		\item No such compatibility ruled: Incompatible by I3.
+	\end{itemize}
+\end{itemize}
+
+Lastly, if either license explicitly rules itself compatible or incompatible with another, this is covered by clauses C1 and I1.
+
+\textbf{Conlusion:} The definitions of compatibility the OSADL uses are complete. Every license combination can be classified with these licenses into at least 1 class of compatibility. \\
+
+Now we analyze the second question, and provide a theoretical example as to why both definitions can apply at the same time. Consider the following licenses:
+
+\textbf{Theoretical leading license:}
+
+\begin{verbatim}
+Copyright (c) COPYRIGHT_HOLDER
+
+Permission is granted to use this licensed work in any form, source code or derived,
+for any purpose, so long as it does not involve any of the following:
+- Advertising in the name of the copyright holder or contributors to the work.
+- Commercial use of the software or other for-profit ways of handling it.
+\end{verbatim}
+
+\textbf{Theoretical subordinate license:}
+
+\begin{verbatim}
+Copyright (c) COPYRIGHT_HOLDER
+
+Permission is granted to use this licensed work for commercial for-profit purposes
+only. It may be used in any form.
+\end{verbatim}
+
+While these licenses are theoretical, and especially the second license has no real-world representation, these licenses are still both permissive licenses, as neither contains a copyleft clause. This means they match both clauses C2 and I2, as the second license's commercial nature contradicts the first license's non-commercial use limitation.
+
+As such, this theoretical combination of licenses is both compatible and incompatible. However, since stating incompatibility is generally a stronger statement, this combination is as a whole incompatible. Additionally, this theoretical example is not represented by any combination in the matrix.
+
+\textbf{Conclusion:} The OSADL definitions of (in)compatibility are not mutually exclusive, however, incompatibility logically supercedes compatibility in cases where both apply. No combinations where this is the case exist in practice, but a theoretical combination can be made to satisfy both C2 and I2 easily.
+
+\subsection{Identifying compatibility classes of interest}
+
+Given the ground truth information in this compatibility matrix and the use of the definitions in the section above, it is useful to examine which information we need to correctly classify most of license combinations within it. This will in turn allow us to perform automated querying for licenses in a smart way, without having to resort to the infeasible per-combination query behavior. By means of a spreadsheet which we add specific columns to, we can attempt to identify useful classes of interest.
 
 If we make this spreadsheet with one row for each combination, and add two columns indicating the OSADL-provided copyleft license table entry for the leading and the subordinate license, we can already make some important distinctions:
 
@@ -272,5 +351,11 @@ If we make this spreadsheet with one row for each combination, and add two colum
 		\end{tabular}
 	\end{table}
 	
-	\item \textbf{CopyleftAny-Questionable} (58 / 13340)\textbf{:} Unknown/N
+	\item \textbf{CopyleftAny-Questionable} (58 / 13340)\textbf{:} This compatibility class is not very significant for this thesis, as it is the product of uncertainties. However, it is still necessary to be mentioned as the fourth compatibility class to make the union of all compatibility classes a complete overview of all possible combinations on the matrix. Naturally, this can be expanded to licenses not on the matrix as well, though here we do not have a ground truth reference about the copyleft property for these unreferenced licenses.
+	
+	Within this category, we find mostly Unknown entries. This is a natural consequence of the subordinate license having a Questionable classification. The explanation field of these entries specifically identifies that this answer is given because a different, more exact, answer can only be given in specific cases which go beyond the scope of the general recommendations the matrix is meant to provide.
+	
+	Interestingly there is 17 entries of the 29 with the OpenSSL license as the subordinate license in this category that do have a definite No answer. However, their explanation is the same explanation given to all other entries in this category where OpenSSL is the subordinate license. Namely the following: "Interpretation: The final statement of the appended SSLeay License 'The licence and distribution terms for any publically available version or derivative of this code cannot be changed' normally must be interpreted as a copyleft clause, but there is no general consensus on this interpretation. Therefore, a recommendation on the compatibility of the OpenSSL license can only be given for selected cases."
+	
+	As such, we believe this to be a mistake from the OSADL. Either a more detailed explanation exists why these 17 cases do have a definitive answer and it is not given, or they are mistakenly classified as "No", where no detailed explanation as to why exists. This bundled together with the fact that all other license combinations that land in this category are also classified as Unknown makes this a category of uncertainty. Due to this, and the fact that this category only represents 0.4\% of all license combinations in the matrix, this is where we conclude our discussion of it for this thesis.
 \end{enumerate}
