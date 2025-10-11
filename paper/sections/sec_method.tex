@@ -2,8 +2,6 @@
 
 \chapter{Method}\label{ch:method}
 
-\comment{!UNFINISHED CHAPTER! Here be dragons.}
-
 For this thesis, we will be interfacing with large language models through the Ollama tool. We've selected this tool as we've found it to be very easy to use, providing a simple way to download models and subsequently querying them manually, or through an API which we can use in our reproduction package to automate certain tasks in obtaining our results~\cite{ollama_docs}.
 
 For our methods proposed, we will perform this method on multiple LLM's to gauge their aptitude, and potentially also identify characteristics that an LLM should have to be able to give mostly correct answers. Where possible, we will aim for high decision accuracy on the question: Is a given combination of two licenses, where one is the leading license and the other the subordinate license, generally compatible? We do this to be able to dynamically construct a matrix in the same format of the license compatibility matrix provided by the OSADL.
@@ -38,7 +36,7 @@ With the models selected, we simply query the model for each license to obtain i
 
 This allows us to assign the license to a license family. We also have the ability to check this evaluation against a ground truth provided by the OSADL, which allows us to assess an accuracy score for each model across the entire dataset. It should be noted specifically, that we will \textbf{not} be considering the licenses of which the OSADL provides the answer: Questionable. We will still allow the models to assess these licenses, but for the purposes of calculating accuracy, we don't include these results as there is no ground-truth answer to compare to.\\
 
-In order to address stochastic behavior which is inherent to large language models, we will query each model multiple times per query as indicated in the general notes section of this chapter.  \comment{Replace this with the border point of change\% approach.} This thesis has chosen to do this 5 times for each model, to weigh practicality of inference time with results.\\
+In order to address stochastic behavior which is inherent to large language models, we will query each model multiple times per query as indicated in the general notes section of this chapter. To determine the amount of times we will be querying the model for the answer, we will be querying the model a large number of times as part of this Proof of Concept. When done, we can generate accuracy-of-X scores, which is the accuracy of the Majority-of-X answer from the first X answers against the ground truth. We determine a border point in these scores where changes to the accuracy score are no longer significant. \comment{Victor: How?} This border point defines the value of X we will use when discussing the further results of this segment in Chapter~\ref{ch:results}. \\
 
 The query each model is presented with for each run is the following, where the license's text is inserted in the indicated position:
 
@@ -61,6 +59,20 @@ The license full text used is fetched from the SPDX license database, because of
 Lastly we remark that this query poses a yes/no question which limites the LLM to generating binary responses only. This is a required aspect of the \textbf{Majority-of-X} approach, as we need a closed answer set to determine a majority vote. For this proof of concept element, what is the majority is simply the majority vote on the single yes/no answers for a given query.
 
 Lastly, we remark that a yes/no answer differs from the OSADL dataset described in Chapter~\ref{ch:related-work}, which also includes the does make a difference between strict and loosely copyleft. In the same chapter, we clarify that this generally does not make a difference and as such we don't need to further specify the answer. We also do not allow the LLM to produce the answer "Questionable", as to ensure it is able to provide an answer every time, rather than defaulting to the neutral answer for the more complex licenses.
+
+\subsection{Evaluation}
+
+We will evaluate the effectiveness of this method using an accuracy score per model for the Majority-of-X answer. We will also discuss some other accuracy scores as well to indicate specific behaviors in Chapter~\ref{ch:results}.
+
+To do this, we define the following rules for accuracy calculation:
+
+\begin{enumerate}
+	\item We say a model is accurate for a given license if its Majority-of-X answer matches that of the ground truth provided by the OSADL. Otherwise, we say the model is inaccurate.
+	\item If the OSADL does not provide a ground truth, we do not consider the result in the accuracy score at all.
+	\item The total accuracy of the model is expressed as the percentage of licenses for which the model is said to be accurate, as per rule 1.
+\end{enumerate}
+
+Given these rules, we will be able to assess and rank all models for their accuracy on existing licenses. These results will be discussed in Chapter~\ref{ch:results}. Based on these results, we are already able to correctly classify a majority of license combinations correctly ($\sim$ 73.276\% at 100\% accuracy of the model). \\
 
 \section{PoC 2: Explicit (in)compatibility}
 

@@ -1,10 +1,27 @@
 % !TEX root = ../Victorvan Herel2025_Thesis.tex
 
-\chapter{Method results}\label{ch:results}
+\chapter{Results}\label{ch:results}
 
 \comment{!UNFINISHED CHAPTER! Here be dragons.}
 
-\section{Copyleft clause detection results}
+\section{PoC 1: Copyleft clause detection results}
+
+\subsection{Determining X for Majority-of-X}
+
+As discussed in Chapter~\ref{ch:method}, we will first determine the value of X for a Majority-of-X answer construction. To do this, we need a border point \comment{Victor: Fill this with requirements for a border point.}. \\
+
+After running the models for multiple times, we can render the following table of the first 15 Majority-of-X answers. It is important to understand that order is always preserved in these answers.
+
+\begin{tabular}{|l|ccccccccccccccc|}
+	\hline& \multicolumn{15}{|c|}{\textbf{Majority-of-X accuracy (all licenses in dataset with known truth)}} \\
+	\multicolumn{1}{|r|}{\textbf{X = $\ldots$}} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{10} & \textbf{11} & \textbf{12} & \textbf{13} & \textbf{14} & \textbf{15} \\\hline
+	Llama3 & 001 & 002 & 003 & 004 & 005 & 006 & 007 & 008 & 009 & 010 & 011 & 012 & 013 & 014 & 015 \\
+	Gemma3 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\
+	Deepseek R1 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\
+	Qwen3 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\\hline
+\end{tabular}
+
+\subsection{Accuracy scoring}
 
 We consider the results of the copyleft detection experiment first as follows: \\
 
