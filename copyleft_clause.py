@@ -101,5 +101,5 @@ if __name__ == "__main__":
               f"Time remaining: {(num_licenses - i - 1) * avg_inference_time:.2f}s")
 
         # Save results to a file
-        with open(f"{MODEL_NAME.replace(":","-")}_copyleft.json", "w", encoding="utf-8") as f:
+        with open(f"{MODEL_NAME.replace(':','-')}_copyleft.json", "w", encoding="utf-8") as f:
             json.dump(result_table, f, indent=4)
