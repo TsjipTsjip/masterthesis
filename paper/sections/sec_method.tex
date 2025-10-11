@@ -28,13 +28,11 @@ This thesis will used a method inspired by ensemble classifiers in clustering pr
 
 To do this, we will run each query-model combination multiple times, asking it questions which have a closed set of potential answers as much as possible. Where this isn't possible, such as with producing a list of license names, manual curation is needed to produce this closed answer set. For the example, this would be listing the SPDX license ID's for the license names produced. The final answer that will be regarded as the definitive answer of the model is the majority vote of the model's different responses over the answer sets. \\
 
-A variable to consider is the amount of times a model is presented an identical query for this majority vote system. We will discuss the way this variable is determined inside the discussion of each of the methods, generally basing it on a border point where further querying is not likely to change a significant portion of the answers it provides on a question with a known ground truth. We will call this answer the \textbf{Majority-of-X} answer, where X is the number of queries used in determining said answer.
+A variable to consider is the amount of times a model is presented an identical query for this majority vote system. We will discuss the way this variable is determined inside the discussion of each of the methods, generally basing it on a border point where further querying is not likely to change a significant portion of the answers it provides on a question with a known ground truth\comment{Does there have to be a ground truth for this approach to work?}. We will call this answer the \textbf{Majority-of-X} answer, where X is the number of queries used in determining said answer.
 
 \section{PoC 1: Copyleft}
 
-A first question this thesis aims to provide a proof of concept for is the ability for large language models to discern whether a given license text contains a copyleft clause. We do this as we recall that, in Chapter~\ref{ch:related-work}, we determined that the presence of a copyleft clause, and thus the license family to which a license belongs, is a strong indicator for determining further license configuration compatibilities.
-
-\subsection{Approach}
+A first question this thesis aims to provide a proof of concept for is the ability for large language models to discern whether a given license text contains a copyleft clause. We do this as we recall that, in Chapter~\ref{ch:related-work}, we determined that the presence of a copyleft clause, and thus the license family to which a license belongs, is a strong indicator for determining further license configuration compatibilities. \\
 
 With the models selected, we simply query the model for each license to obtain its answer to the question: Does this license text contain a copyleft clause?
 
@@ -65,3 +63,27 @@ Lastly we remark that this query poses a yes/no question which limites the LLM t
 Lastly, we remark that a yes/no answer differs from the OSADL dataset described in Chapter~\ref{ch:related-work}, which also includes the does make a difference between strict and loosely copyleft. In the same chapter, we clarify that this generally does not make a difference and as such we don't need to further specify the answer. We also do not allow the LLM to produce the answer "Questionable", as to ensure it is able to provide an answer every time, rather than defaulting to the neutral answer for the more complex licenses.
 
 \section{PoC 2: Explicit (in)compatibility}
+
+A second element of this proof of concept involves determining which licenses are listed as explicitly compatible or incompatible. We do this, as this is a necessary element to eliminate some of the CopyleftAny-X license combinations directly.
+
+Once again, we simply provide a query to each model, this time asking the following question: Which licenses are explicitly compatible or incompatible with this license? We do this with the following verbatim query:
+
+\begin{verbatim}
+	=== LICENSE FULL TEXT ===
+	
+	{license_fulltext}
+	
+	=== INSTRUCTION ===
+	
+	You are a license compatibility expert. Does the license list any other licenses
+	with which it is explicitly compatible or incompatible?
+	Answer on two lines, providing a comma-separated list or "NONE" on each.
+	The first line holds licenses which are explicitly compatible.
+	The last line holds licenses which are explicitly incompatible.
+\end{verbatim}
+
+This query produces results which are not binary. The results are also not in a sufficient closed answer set, as a license can have multiple names. For this reason, manual curation of these results is needed to determine a list of license ID's for each answer.
+
+When we have this list, it is sufficiently closed to perform majority voting per license. A license is either in the list, or it is not. If a majority believes it is in the list, the final answer will have that license. If a majority believes it is not, the final answer will follow this answer. \\
+
+\textbf{Important note:} Because of the property presented in Chapter~\ref{ch:related-work} regarding the copyleft and permissive license families, we only need to run this experiment on the subset of licenses that are believed to be copyleft of at least one of the LLM's used by PoC 1.
