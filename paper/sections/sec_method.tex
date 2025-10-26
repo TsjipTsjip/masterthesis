@@ -78,6 +78,8 @@ Given these rules, we will be able to assess and rank all models for their accur
 
 A second element of this proof of concept involves determining which licenses are listed as explicitly compatible or incompatible. We do this, as this is a necessary element to eliminate some of the CopyleftAny-X license combinations directly.
 
+\subsection{Approach}
+
 Once again, we simply provide a query to each model, this time asking the following question: Which licenses are explicitly compatible or incompatible with this license? We do this with the following verbatim query:
 
 \begin{verbatim}
@@ -96,6 +98,85 @@ Once again, we simply provide a query to each model, this time asking the follow
 
 This query produces results which are not binary. The results are also not in a sufficient closed answer set, as a license can have multiple names. For this reason, manual curation of these results is needed to determine a list of license ID's for each answer.
 
-When we have this list, it is sufficiently closed to perform majority voting per license. A license is either in the list, or it is not. If a majority believes it is in the list, the final answer will have that license. If a majority believes it is not, the final answer will follow this answer. \\
+When we have this list, it is sufficiently closed to perform majority voting per license. A license is either in the list, or it is not. If a majority believes it is in the list, the final answer will have that license in the list as well. Conversely, a license will be absent from the final list if it is not supported by a majority. \\
 
-\textbf{Important note:} Because of the property presented in Chapter~\ref{ch:related-work} regarding the copyleft and permissive license families, we only need to run this experiment on the subset of licenses that are believed to be copyleft of at least one of the LLM's used by PoC 1.
+\subsection{Evaluation}
+
+We cannot directly evaluate this proof of concept with a quantitative measure, as we do not have a ground truth of the answers for these questions. We will however provide a qualitative sanity check of the answers in the discussion of the results of this section separately.
+
+To further support the added value of this approach to the full system, we will also examine the complete results with a naive approach of solving CopyleftAny-X combinations, as opposed to this approach. Ideally, we will see that the accuracy of this method is higher.
+
+\section{PoC 3: Combining the approaches}
+
+Given the already discussed proof-of-concept components, we can use a flowchart-based mechanism to combine them, and produce a system that allows us to classify a given license combination automatically, based on determining its properties through the use of a given LLM. \\
+
+This proof of concept is the capstone of the thesis, with which we will aim to answer the question posed: Is the use of large language models in the context of open source software license combinations feasible?
+
+\subsection{Approach}
+
+To do this correctly, we recall the following definitions provided by the OSADL:
+
+\begin{itemize}
+	\item \textbf{Compatibility:} Compatibility is assumed if:
+	\begin{enumerate}
+		\item compatibility with the other license is explicitly ruled in a particular license, or
+		\item the two licenses in question both do not contain a copyleft clause, or
+		\item the leading license contains a copyleft clause and the other license does not and also does not impose any obligation that the first license does not allow to impose.
+	\end{enumerate}
+	
+	\item \textbf{Incompatibility:} Incompatibility is assumed if:
+	\begin{enumerate}
+		\item incompatibility with another license is explicitly ruled in a particular license, or
+		\item one license imposes an obligation that the other license does not allow to impose, or
+		\item the two licenses in question both contain a copyleft clause and no license contains an explicit compatibility clause for this license combination.
+	\end{enumerate}
+\end{itemize}
+
+Given these licenses, it is evident that the results of PoC 1 are closely tied to clauses C2, C3, I2 (of which the explanation is already provided in Chapter~\ref{ch:related-work}) and I3. Likewise, the results of PoC 2 are closely related to C1, I1 and I3. This gives us the ability to define the following decision rules for a given license combination:
+
+\begin{enumerate}
+	\item If either license explicitly lists incompatibility with the other license, \textbf{rule incompatible}.
+	\item If either license explicitly lists compatibility with the other license, \textbf{rule compatible}.
+	\item If the leading license is permissive ...
+	\begin{enumerate}
+		\item and the subordinate license is permissive, \textbf{rule compatible}.
+		\item and the subordinate license is copyleft, \textbf{rule incompatible}.
+	\end{enumerate}
+	\item If the leading license is copyleft ...
+	\begin{enumerate}
+		\item and the subordinate license is permissive, \textbf{rule compatible}.
+		\item and the subordinate license is copyleft, \textbf{rule incompatible}. (Explicit compatibility already handled by rule 2).
+	\end{enumerate}
+\end{enumerate}
+
+\comment{Victor: Unsolved problem: Compatibility is not bi-directional. What if only one license lists the other explicitly compatible and the other doesn't mention anything? Subordinate? Leading? TBD.}
+
+\subsection{Additional PoC 2 evaluation}
+
+Additionally, to evaluate PoC 2 further, we will compare the above approach with an approach that doesn't use the explicit compatibility or incompatibility property:
+
+\begin{enumerate}
+	\item If the leading license is permissive ...
+	\begin{enumerate}
+		\item and the subordinate license is permissive, \textbf{rule compatible}.
+		\item and the subordinate license is copyleft, \textbf{rule incompatible}.
+	\end{enumerate}
+	\item If the leading license is copyleft ...
+	\begin{enumerate}
+		\item and the subordinate license is permissive, \textbf{rule compatible}.
+		\item and the subordinate license is copyleft, \textbf{rule incompatible}.
+	\end{enumerate}
+\end{enumerate}
+
+In this approach, the handling of rule 1 is correct. The handling of rule 2 bases itself off of the majority of licenses that fall under this category, as provided by the OSADL.
+
+\subsection{Evaluation}
+
+We will evaluate the complete proof of concept, as well as the alternative method without PoC 2, via an accuracy score. This accuracy score is simply determined by comparing the end result for every license combination to the ground truth established by the OSADL organisation. However, there is some caveats to this approach:
+
+\begin{itemize}
+	\item In the case that the OSADL indicates a given combination has "Depending compatibility", this means that the combination itself is not compatible, but a given upgrade path is. As upgrade paths are out of scope of the proof of concept presented, we will say a given LLM is accurate if the result is "Incompatible" for these entries.
+	\item If the OSADL does not provide a ground truth answer, indicated by marking the entry as "Unknown", we do not allow answers given here to have an effect on the model's accuracy score. The LLM will have provided a response, but in the absence of a ground truth it is not possible to validate this answer.
+\end{itemize}
+
+Given these caveats and their proposed solutions, an accuracy score can be determined per model and per combination method proposed. We will use these accuracy scores to assess the proposed methods.
