@@ -34,17 +34,9 @@ Let's now examine these results individually per model. \\
 
 \textbf{gemma3:4b:} The gemma3 model appears very stable, already stabilising fully at X = 3. Due to this consistency, we choose \textbf{3 for the value of X for gemma3:4b}. \\
 
-\textbf{llama3:} A surprisingly varied model, given that it starts at around 55\% accuracy, but rises all the way up to 86\% accuracy at Majority-of-15. Given that this is the fastest running model, this necessity for more runs is acceptable. We have however not seen the end of the evolution for llama3, as the trend did not stagnate at the boundary 15. For now, we choose \textbf{15 for the value of X for llama3}, but we will make additional runs for this model to see if we can further pinpoint an appropriate border point. \\
+\textbf{llama3:} A varying model which offers great speed and relatively strong accuracy. While \\
 
 \textbf{qwen3:8b:} This model is the strongest on the list, while also having the longest average runtime. We see that for this model, only two points of change occur in the entire table, and this model is therefore very consistent, like gemma3:4b discussed before. Given the stochasitc nature of LLM's, choosing value 1 is not appropriate. For this reason, we choose \textbf{3 for the value of X for qwen3:8b}.
-
-\subsubsection{Finding the border point for Llama3}
-
-Because of the fact that the accuracy scores for Llama3 have not reached a stable point yet, we have made the choice to add more runs for the model.
-
-The results of this work give us the following accuracy graph which has been extended with the additional runs we have generated for this model.
-
-\comment{Victor: Fill this.}
 
 \subsection{Accuracy scoring}
 
