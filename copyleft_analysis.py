@@ -60,6 +60,9 @@ def main():
                 # "majorities": majority_results[llm_name]
             }
 
+    # Write per-LLM majority-of-X JSON files for all X (1,3,5,...)
+    write_majority_json(result_files, min_runs_available)
+
     # Step 2: Write rolling accuracies tables to .tex files
     num_columns = (min_runs_available // 2 + 1)  # All for Majority-of-X results
 
@@ -230,6 +233,36 @@ def calculate_accuracy_by_majority(result_files):
         }
 
     return llm_accuracy, majority_results
+
+
+def write_majority_json(result_files, min_runs_available, out_dir='results/autogen'):
+    """
+    Write per-LLM majority-of-X JSON files to `out_dir`.
+    Files: `llm_name_majority_of_X.json` containing a mapping license_id -> true|false
+    """
+    os.makedirs(out_dir, exist_ok=True)
+
+    def _sanitize(name: str) -> str:
+        # Replace characters that may be problematic in filenames
+        for ch in [':', '/', '\\', ' ']:
+            name = name.replace(ch, '-')
+        return name
+
+    for X in range(1, min_runs_available + 1, 2):
+        # collect the first X runs for every LLM
+        files_for_X = []
+        for llm, runs in result_files.items():
+            files_for_X.extend(runs[:X])
+
+        # reuse existing helper that returns (accuracy_results, majority_results)
+        _, majority_results = calculate_accuracy_by_majority(files_for_X)
+
+        # write one file per LLM for this X
+        for llm_name, llm_majorities in majority_results.items():
+            safe_name = _sanitize(llm_name)
+            out_path = os.path.join(out_dir, f"{safe_name}_majority_of_{X}.json")
+            with open(out_path, 'w', encoding='utf-8') as f:
+                json.dump(llm_majorities, f, indent=2, sort_keys=True)
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ import time
 import ollama
 import utils
 
-MODEL_NAME = "llama3"  # Model to use for inference
+MODEL_NAME = "qwen3:8b"  # Model to use for inference
 QUERY_TEMPLATE = """
 === LICENSE FULL TEXT ===
 
