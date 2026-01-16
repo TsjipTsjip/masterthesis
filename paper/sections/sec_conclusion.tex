@@ -1,24 +1,38 @@
 % !TEX root = ../Victorvan Herel2025_Thesis.tex
 
-\chapter{Conclusion}\label{ch:conclusion}
+\chapter{Conclusions}\label{ch:conclusion}
 
-We recapitulate the thesis by re-examining the context the work is placed in. We address the problem of the mismatch between legal professionals and open source software developers which is clear and evident, and deduce the problem of license understanding based on this key point. It is important to recall that software licenses are still very much necessary in the context of open source software, given that the default of no license imposes restrictions on the software which cannot be reconciled with the goal of open source.
+This thesis started by examining the generally applicable aspects of copyright, and how authorship rights work. We examined software licensing more specifically, and looked at how the Open Source Software community solved the problem of the restrictive authorship rights default, where no one else is permitted to use the work. Additionally, we examined software interaction patterns, and how they play into software licensing.
 
+Following this, we identified that the intersection between the legal aspects of licensing and the practical considerations of software development pose a challenge, as most of the people developing software do not have a legal background. This lack of generally available knowledge in this niche is a problem this thesis intends to provide a basis for a solution in. \\
 
+To do this, we looked at existing standards surrounding the management of software licenses in the industry. The SPDX project allows us to uniquely identify any given reused license. The OSADL provides license compliance checklists for a subset of the available licenses, and proved an invaluable contribution to this thesis by means of a dataset on which we could evaluate automated reasoning models, like the large language models proposed. \\
+
+In summary, we identified that by automating the detection of the presence of a copyleft clause of any strictness, we can formulate a simple algorithm that takes these values to assess a given license combination, in which a baseline answer is generated. This answer still requires human curation to be valid, but high accuracies have been obtained, making the task of assessing a large number of combinations easier.
+
+For the performance of this process, one must select a large language model. This thesis examined four models, which trade accuracy for inference speed. The most accurate model family is Qwen3, followed by Deepseek R1, Llama3 and Gemma3. If one wishes to examine an individual license combination, the high accuracy of the first model in this line is preferred. When assessing large amounts (exponential growth respective to adding new licenses to a list) of combinations, one can trade this off for inference speed and available processing power.
+
+We identified a number of interesting properties about each model, which can also be used to assess selection of other models to run this same experiment with as they are made generally available. This thesis primarily examined factors such as the model's stability (influencing the Majority-of-X variable), qualitatively assessed inference speed, and general architecture. \\
+
+Primarily, this thesis found that it is generally feasible to deploy large language models in solving the problem described, and we believe it poses a promising starting point for further refining these abilities.
+
+Additionally, this thesis only examined one specific process of making these compatibility assessments. Future work could also examine other systems that don't directly use natural language to interface with the large language models. For copyleft clause detection, many other methods of clustering into Yes / No exist which can be used. Additionally, at the end of Chapter~\ref{ch:results}, we discussed other factors that can help further improve accurate assessments, which can also be the subject of further research.
+
+\comment{Victor: This remains the template for the thesis, which I will take as instructions to formulate a conclusion chapter.}
 
 The first paragraph of the conclusion is usually a short review of this paper/thesis goals, problems, and context. 
 
 After that we generally cover the following main points in the next paragraphs:
 
 \begin{itemize}
-\item \textbf{Summary of Results.} 
+\item \textbf{Summary of Results.}
    In a paper/thesis, we probably have many pages in previous sections presenting results. 
    Now in the conclusion, it is time to put the most important results here for the reader. 
    Especially research with measurable results, we highlight the numbers here. 
-\item \textbf{Main Findings / Conclusions.} 
+\item \textbf{Main Findings / Conclusions.}
    Many times, we have a result but based on its number we can draw a conclusion or formulate a finding on top of it. 
    Even if it was previous discussed in an earlier section, we need to re-state here. 
-\item \textbf{Contributions.} 
+\item \textbf{Contributions.}
    If we presented/discussed the main contributions of this research in the introduction, then we need to do again in the conclusion.
    Do not repeat verbatim what was written in previous sections. 
    In the conclusion, we expect contributions to be more detailed and linked to the results/findings when possible.

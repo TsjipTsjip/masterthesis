@@ -26,9 +26,9 @@ This thesis will used a method inspired by ensemble classifiers in clustering pr
 
 To do this, we will run each query-model combination multiple times, asking it questions which have a closed set of potential answers as much as possible. Where this isn't possible, such as with producing a list of license names, manual curation is needed to produce this closed answer set. For the example, this would be listing the SPDX license ID's for the license names produced. The final answer that will be regarded as the definitive answer of the model is the majority vote of the model's different responses over the answer sets. \\
 
-A variable to consider is the amount of times a model is presented an identical query for this majority vote system. We will discuss the way this variable is determined inside the discussion of each of the methods, generally basing it on a border point where further querying is not likely to change a significant portion of the answers it provides on a question with a known ground truth\comment{Does there have to be a ground truth for this approach to work?}. We will call this answer the \textbf{Majority-of-X} answer, where X is the number of queries used in determining said answer.
+A variable to consider is the amount of times a model is presented an identical query for this majority vote system. We will discuss the way this variable is determined in the next section. Importantly, we define the answer of a model in this setup as the \textbf{Majority-of-X} answer, where X is the number of queries used in determining said answer.
 
-\section{Experiment 1: Copyleft}
+\section{Experiment 1: Copyleft clause}
 
 A first question this thesis aims to provide a proof of concept for is the ability for large language models to discern whether a given license text contains a copyleft clause. We do this as we recall that, in Chapter~\ref{ch:related-work}, we determined that the presence of a copyleft clause, and thus the license family to which a license belongs, is a strong indicator for determining further license configuration compatibilities. \\
 
@@ -36,7 +36,7 @@ With the models selected, we simply query the model for each license to obtain i
 
 This allows us to assign the license to a license family. We also have the ability to check this evaluation against a ground truth provided by the OSADL, which allows us to assess an accuracy score for each model across the entire dataset. It should be noted specifically, that we will \textbf{not} be considering the licenses of which the OSADL provides the answer: Questionable. We will still allow the models to assess these licenses, but for the purposes of calculating accuracy, we don't include these results as there is no ground-truth answer to compare to.\\
 
-In order to address stochastic behavior which is inherent to large language models, we will query each model multiple times per query as indicated in the general notes section of this chapter. To determine the amount of times we will be querying the model for the answer, we will be querying the model a large number of times as part of this Proof of Concept. When done, we can generate accuracy-of-X scores, which is the accuracy of the Majority-of-X answer from the first X answers against the ground truth. We determine a border point in these scores where changes to the accuracy score are no longer significant. \comment{Victor: How?} This border point defines the value of X we will use when discussing the further results of this segment in Chapter~\ref{ch:results}. \\
+In order to address stochastic behavior which is inherent to large language models, we will query each model multiple times per query as indicated in the general notes section of this chapter. To determine the amount of times we will be querying the model for the answer, we will be querying the model a large number of times as part of this Experiment. When done, we can generate accuracy-of-X scores, which is the accuracy of the Majority-of-X answer from the first X answers against the ground truth. Using these results, we determine a value of X per model assessed, which we will use further in Experiment 2. This parameter is a trade-off between stability of the results, which we will prefer, and speed of inference. This is because we run the inference X times, and as such higher values will result in higher inference times. The only acceptable values of X are uneven. The uneven requirement ensures a majority consensus can be reached at all. We also require the value of X to be higher than 1, as choosing 1 as value of X is the same as just running one stochastically influenced experiment. \\
 
 The query each model is presented with for each run is the following, where the license's text is inserted in the indicated position:
 
@@ -74,7 +74,7 @@ To do this, we define the following rules for accuracy calculation:
 
 Given these rules, we will be able to assess and rank all models for their accuracy on existing licenses. These results will be discussed in Chapter~\ref{ch:results}. Based on these results, we are already able to correctly classify a majority of license combinations correctly ($\sim$ 73.276\% at 100\% accuracy of the model). \\
 
-\section{Experiment 2: Additional inference}
+\section{Experiment 2: Combination reasoning}
 
 Given the property gained in experiment 1, we can also already attempt to infer the result of two licenses being combined in a particular way. This is because we already observed interesting numbers with respect to the copyleft property in Chapter~\ref{ch:related-work}, the most telling of which is the fact that 100\% of license combinations where both are permissive are considered to be compatible. \\
 
@@ -103,7 +103,7 @@ To achieve the goal outlined correctly, we recall the following definitions prov
 Given these licenses, it is evident that the results of Experiment 1 are closely tied to clauses C2, C3, I2, I3 (of which the explanation is already provided in Chapter~\ref{ch:related-work}) and I3. This leaves the clauses C1 and I1 unhandled, but they seem to be more of a formality, as an explicit compatibility clause outside of version upgrades of a given license haven't been observed by this thesis in the dataset. This gives us the ability to define the following decision rules for a given license combination:
 
 \begin{enumerate}
-	\item If the subordinate license can be upgraded to the leading license, \textbf{rule incompatible}.
+	\item If the subordinate license can be upgraded to the leading license, \textbf{rule compatible}.
 	\item If the leading license is permissive ...
 	\begin{enumerate}
 		\item and the subordinate license is permissive, \textbf{rule compatible}.
@@ -112,7 +112,7 @@ Given these licenses, it is evident that the results of Experiment 1 are closely
 	\item If the leading license is copyleft ...
 	\begin{enumerate}
 		\item and the subordinate license is permissive, \textbf{rule compatible}.
-		\item and the subordinate license is copyleft, \textbf{rule incompatible}. (Explicit compatibility already handled by rule 2).
+		\item and the subordinate license is copyleft, \textbf{rule incompatible}.
 	\end{enumerate}
 \end{enumerate}
 
@@ -128,7 +128,3 @@ We will evaluate the complete experiment via an accuracy score. This accuracy sc
 \end{itemize}
 
 Given these caveats and their proposed solutions, an accuracy score can be determined per model and per combination method proposed. We will use these accuracy scores to assess the proposed methods.
-
-\section{Further avenues of work}
-
-Lastly, it is important for us to identify areas of the results which are not sufficiently covered by this method. We will make an attempt to characterise these areas, forming the negative side of the answer to our research question about the extent of feasibility of this method.

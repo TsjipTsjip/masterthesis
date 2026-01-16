@@ -2,11 +2,11 @@
 
 \chapter{Results}\label{ch:results}
 
-\section{Experiment 1: Copyleft clause detection results}
+\section{Experiment 1: Copyleft clause}
 
 \subsection{Determining X for Majority-of-X}
 
-As discussed in Chapter~\ref{ch:method}, we will first determine the value of X for a Majority-of-X answer construction. To do this, we need a border point \comment{Victor: Fill this with requirements for a border point.}. \\
+As discussed in Chapter~\ref{ch:method}, we will first determine the value of X for a Majority-of-X answer construction. To do this, we need need to define values for X, based on where we observe the stochasticity to have stabilised. We will do this by making observations up to the value of X = 15, where a requirement for further runs would lower the credibility of the model. \\
 
 After running the models for multiple times, we can render the following accuracy table of the first 15 Majority-of-X answers for each LLM. It is important to understand that ordering of individual runs is always preserved while calculating this answer. As such, evening out the stochastic behavior is fair and not based on arbitrary decisions. \\
 
@@ -34,9 +34,9 @@ Let's now examine these results individually per model. \\
 
 \textbf{gemma3:4b:} The gemma3 model appears very stable, already stabilising fully at X = 3. Due to this consistency, we choose \textbf{3 for the value of X for gemma3:4b}. \\
 
-\textbf{llama3:} A varying model which offers great speed and relatively strong accuracy. While \\
+\textbf{llama3:} A varying model which offers great speed and relatively strong accuracy, while among the lower scores in the results. Unlike the other models, this model does not reach a stable point within the first Majority-of-15 result sets. We choose \textbf{15 for the value of X for llama3}, as it is a fast model where making multiple runs is not an issue. \\
 
-\textbf{qwen3:8b:} This model is the strongest on the list, while also having the longest average runtime. We see that for this model, only two points of change occur in the entire table, and this model is therefore very consistent, like gemma3:4b discussed before. Given the stochasitc nature of LLM's, choosing value 1 is not appropriate. For this reason, we choose \textbf{3 for the value of X for qwen3:8b}.
+\textbf{qwen3:8b:} This model is the strongest on the list, while also having the longest average runtime. We see that for this model, only two points of change occur in the entire table, and this model is therefore very consistent, like gemma3:4b discussed before. Given the stochastic nature of LLM's, choosing value 1 is not appropriate. For this reason, we choose \textbf{3 for the value of X for qwen3:8b}.
 
 \subsection{Accuracy scoring}
 
@@ -47,6 +47,8 @@ We consider the results of the copyleft detection experiment first as follows: \
 \textbf{Average accuracy:} 89.10\%
 
 \textbf{Majority-of-7 accuracy:} 92.98\% (106/114)
+
+\comment{Serge: Confusion table is not explained.}
 
 \begin{table}[h]
 	\label{tab:deepseekr1-confmatrix}
@@ -68,11 +70,11 @@ We consider the results of the copyleft detection experiment first as follows: \
 	\caption{Gemma3:4b confusion matrix (Majority-of-3)}
 \end{table}
 
-\textbf{Llama3:} This model is, as already mentioned, special as opposed to the other models in the sense that it doesn't perform well at all individually, but when placed in a majority configuration, it surpasses the Gemma3 model. This seems to suggest that this model is prone to making very varied mistakes, but it doesn't make the same mistakes often, allowing a majority configuration to recover the accuracy for an individual result which may be wrong, up to a limit. We also see this in the following datapoints.
+\textbf{Llama3:} This model performs slightly better than Gemma3:4b, and is also slightly more varied. It provides a fast baseline of what simple models can achieve, allowing you to trade a minor amount of accuracy for faster runtime. However, this model is varied and requires more than 15 runs to become stable, as such, answers provided by this model should be considered as largely stochastic still.
 
-\textbf{Average accuracy:} \comment{Victor: TBD}
+\textbf{Average accuracy:} 83.74\%
 
-\textbf{Majority-of-15 accuracy:} \comment{Victor: TBD}
+\textbf{Majority-of-15 accuracy:} 86.84\% (99/114)
 
 \begin{table}[h]
 	\label{tab:llama3-confmatrix}
@@ -116,13 +118,81 @@ The Gemma3, Deepseek R1 and Qwen3 model all failed to classify two licenses corr
 
 \subsubsection{Individual mistakes}
 
+\comment{Victor: This heading needs a lot more love, and I intend to look at each mistaken license itself, determine where its copyleft clause is or isn't, and based on that, I will explain the model's mistake based on the reasonings it has provided.}
+
 \textbf{Deepseek R1:} This model is a well-performing model that only seems to struggle on licenses which other models aside from qwen3 struggle to classify correctly as well. These are the CDDL and MS license families (4 total, though Deepseek specifically does correctly handle the MS-PL license). In terms of mistakes not shared by other models, it seems to struggle on the CPL-1.0 license, as well as both EPL licenses.
 
-\textbf{Gemma3:} We observe two kinds of mistakes for this model. Firstly, for many of the mistakes, we see that this model has answered incorrectly across the board. This makes this model unique in this sense, as none of the other models examined exhibit this kind of absolute behavior. Unfortunately, it is rather hard to determine why it does this, \comment{Victor: Read the license's explanations}. Secondly, we see that it is not as consistent for the MPL license family (3 total on the list) specifically, where it does answer nondeterministically each time the license is examined. This \comment{Victor: Explain this further too.}.
+\textbf{Gemma3:} We observe two kinds of mistakes for this model. Firstly, for many of the mistakes, we see that this model has answered incorrectly across the board. This makes this model unique in this sense, as none of the other models examined exhibit this kind of absolute behavior. Unfortunately, it is rather hard to determine why it does this. Secondly, we see that it is not as consistent for the MPL license family (3 total on the list) specifically, where it does answer nondeterministically each time the license is examined.
 
 \textbf{Llama3:} The mistakes of this model are harder to discuss in a general sense and appear to be linked to the model's limited reasoning capacity. We observe that in most cases, the model simply picks out an existing clause in the license and then considers that to be the full reasoning for a given decision. Another pattern it provides in its reasonings is a sort of reasoning loop, where it places the confident statement that the license does or does not contain a copyleft clause, and then argues that by providing the definition of such a clause, without making references to the actual license text.
 
 \textbf{Qwen3:} Artistic-2.0, CPL-1.0
 
 
-% \section{Experiment 2: Combined reasoning on license combinations}
+\section{Experiment 2: Combination reasoning}
+
+The experiment as outlined in Chapter~\ref{ch:method} comes down to simply running an algorithm. When we do this, we obtain the following results table, which has the Majority-of-X parameter in the leftmost column. Results in bold are the results which correspond to the Majority-of-X value chosen for the model at the start of this chapter. \\
+
+
+\begin{table}[h]
+	\label{tab:experiment2-large}
+	\centering
+	\begin{tabular}{|r|c|c|c|c|}
+		\hline
+		\textbf{X} &  \textbf{Deepseek R1}   &     \textbf{Gemma3}     &     \textbf{Llama3}      &      \textbf{Qwen3}      \\ \hline
+		         1 &     86.90\% (10706)     &     79.26\% (9765)      &      80.89\% (9966)      &     94.66\% (11662)      \\
+		         3 &     87.15\% (10737)     & \textbf{80.18\% (9878)} &     83.98\% (10346)      & \textbf{93.74\% (11549)} \\
+		         5 &     89.43\% (11018)      &     80.19\% (9880)      &     81.18\% (10001)      &     93.74\% (11549)      \\
+		         7 & \textbf{90.25\% (11119)} &     80.19\% (9880)      &     82.66\% (10184)      &     94.63\% (11658)      \\
+		         9 &     90.97\% (11208)      &     80.19\% (9880)      &     83.57\% (10296)      &     94.63\% (11658)      \\
+		        11 &     90.97\% (11208)      &     80.19\% (9880)      &     84.25\% (10380)      &     94.63\% (11658)      \\
+		        13 &     90.97\% (11208)      &     80.19\% (9880)      &     85.44\% (10526)      &     94.63\% (11658)      \\
+		        15 &     90.04\% (11093)      &     80.19\% (9880)      & \textbf{84.50\% (10411)} &     94.63\% (11658)      \\ \hline
+	\end{tabular}
+	\caption{Combination reasoning results: Perc\% (Number)}
+\end{table}
+
+To make sense of this table, we also list the following observations:
+\begin{itemize}
+	\item For 116 licenses, a total of $116^2 = 13456$ permutations exist.
+	\item 116 of these combinations are combining the license with itself, which is always trivially compatible. These were not included in the results table above.
+	\item Of the remaining combinations, the OSADL did not asses 1020. These are also not counted in the results table above.
+	\item The remaining number of combinations that were assessed using the proposed assessment algorithm is: $13456 - 116 - 1020 = 12320$
+\end{itemize}
+
+An immediately obvious observation is that, despite the complexities outlined in the previous chapters, the proposed automated method of assessing license combinations is able to achieve a relatively high accuracy still overall. However, as we recall, a large number of the license combinations is Permissive-X in the dataset. We've also observed in Experiment 1 that this category is the easiest for the models to classify. For that reason, we also present the following summarized observations when we take out all 9775 cases that have a leading permissive license in the OSADL copyleft table, for the respective X values we've already chosen for each model (which we've placed in the table header next to the model).
+
+\begin{table}[h]
+	\label{tab:experiment2-permissive-removed}
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Deepseek R1 (7)} & \textbf{Gemma3 (3)} & \textbf{Llama3 (15)} & \textbf{Qwen3 (3)} \\ \hline
+		      80.26\%        &     69.16\%     &     75.80\%     &    83.35\%     \\ \hline
+	\end{tabular}
+	\caption{Non Permissive-X combination reasoning results: Perc\% (Number)}
+\end{table}
+
+When we compare Table~\ref{tab:experiment2-large} to Table~\ref{tab:experiment2-permissive-removed}, we can say that all models are indeed worse at classifying models where a copyleft license may be involved. What's interesting is that all models lose approximately the same amount of accuracy too, all around 10\%. This is a qualitative observation, yet it shows that all models we assessed are somewhat similarly affected by the difficulty of copyleft license assessment. It is also important to point out that all models do consistently get the majority of these assessments right. \\
+
+When we assess our four models, it is clear that on all cases, \textbf{Qwen3} performs the best, with \textbf{Deepseek R1} following close behind. The other two models are less accurate, but were observed to be significantly faster, again showing the tradeoff between accuracy and speed of inference. \\
+
+Lastly, we also observe that the \textbf{Gemma3} model is very consistent, showing the same result across all X values. We also observe similar, but less consistent behavior with the \textbf{Deepseek R1} model. These behaviors are a direct consequence of their consistency which we already observed in Experiment 1, as this Experiment is a deterministic extension of those results.
+
+\section{Answering the research questions}
+
+At the end of Chapter~\ref{ch:introduction}, we asked two research questions. This section serves to consolidate observations made in these experiments, and formulate those into a clear answer.
+
+\subsection{Important software license properties}
+
+Individually, the license's copyleft property has been shown to be an incredibly powerful indicator of its interaction patterns with other licenses. Interestingly, our experiment did not make a difference between Copyleft Limited and Strong Copyleft license families, and despite this the models still managed to obtain strong accuracy results. This indicates that the incompatibility interaction between the Permissive and Copyleft families is a lot stronger, as opposed to any internal incompatibility interactions for the latter.
+
+Secondarily, a factor which was not explored by our experiment but can still make inference more accurate is explicit compatibility or incompatibility detection. These often take the shape of an upgrade path which was discussed in Chapter~\ref{ch:related-work}, but as licenses can be custom made, explicit statements work as well. \\
+
+It should be noted however that while these factors can be used by an automated reasoning system to assess license combinations at scale, it cannot achieve full accuracy due to the complex nature of legal documents and interactions of specific words, often subject to human curation in the forms of judges interpreting the law. Like with all computer-aided automated reasoning, if there is no clear algorithm, human curation is still a requirement before these decisions are actually used in the real world.
+
+\subsection{Feasibility assessment}
+
+This thesis also asked the question to what extent large language models can be feasibly deployed to answer these license compatibility questions. This thesis answers this question by means of the combination of Experiment 1 and Experiment 2, which shows that this is indeed largely feasible. In the previous section, we already addressed the high importance of human curation, and this cannot be fully removed out of the equation. However, we conclude that this can still be a valuable assistive tool to provide a baseline which can be curated, which is less human-intensive than having to assess an entire matrix of combinations from scratch. \\
+
+To conclude, we address that this thesis is not the end. Rather, we have found that this niche of applying machine learning on software licensing remains largely unexplored by the academic community. This thesis can serve as a baseline, based on which future work can be formed.

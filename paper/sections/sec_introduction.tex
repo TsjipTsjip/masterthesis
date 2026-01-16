@@ -76,7 +76,7 @@ When we examine the specific domain of software however, we can identify two pat
 	
 	Actions that produce full inclusion are among the following:
 	\begin{itemize}
-		\item Cherry-picking: Either through \verb*|git cherry-pick| or other similar command that transfers a commit or other section of work verbatim into the target repository, this produces a scenario in which work is included from another source.
+		\item Cherry-picking: Either through \texttt{git cherry-pick} or other similar command that transfers a commit or other section of work verbatim into the target repository, this produces a scenario in which work is included from another source.
 		\item Forking: Splitting off from a work as a fork of that work takes the entire work and then allows you to make your work from it. You can choose to license your changes differently, so long as the original license permits this.
 		\item Binary inclusion: Even binary forms of software are protected under the license which holds over the source code, unless that license specifically disclaims it. In this case inclusion of the binary form of the source's code in the target works the same as the above mentioned cases.
 		\item \textbf{Generally:} Any direct inclusion of source material in any form in any form of the target, even when modified, qualifies as a full inclusion, \textbf{so long as separation between the coverage of each license in play is unclear}. It should be noted that it does not matter where the work comes from, whether that be a repository with a clearly posted license, or a website like StackOverflow or other online forum boards and similar. Even if the license there is not immediately clear, you will need permission from the author to use that work in the way you intend to use it.
@@ -114,9 +114,11 @@ This thesis is a feasibility study into one of those techniques using recent adv
 	
 	If these properties exist, this will also assist in allowing actors outside of the legal profession to understand why a specific conflict occurs in a general and understandable sense, as only the property needs to be explained, not the in depth text of the license itself.
 	
-	\item \textbf{Research question 2:} Is it feasible to deploy large language models to determine these properties of a license?
+	\item \textbf{Research question 2:} To what extent is deploying large language models to determine these properties of a license feasible? By extension, to what can this setup accurately assess a given license combination's compatibility?
 	
 	If the ground work is laid by answering Research question 1, the next step is to automate it. This thesis examines the option of using large language models to do so, and intends to compare these results against known values. This is the ground truth which we have decided to build on, which will be explained further in Chapter~\ref{ch:related-work}.
 	
-	If automation of this process can be made reliable, existing automated workflows can be amended with this method to further improve license compliance reporting.
+	The question aims to provide a general set of recommendations regarding the feasibility of one such system in particular, based on metrics determined against these known truths.
+	
+	If this process can be made reliable, existing automated workflows can be amended with this method to further improve license compliance reporting.
 \end{itemize}
