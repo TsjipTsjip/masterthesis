@@ -366,5 +366,20 @@ If we make this spreadsheet (which the reproduction package can automatically ge
 	
 	As such, we believe this to be a mistake from the OSADL. Either a more detailed explanation exists why these 17 cases do have a definitive answer and it is not given, or they are mistakenly classified as "No", where no detailed explanation as to why exists. This bundled together with the fact that all other license combinations that land in this category are also classified as Unknown makes this a category of uncertainty. Due to this, and the fact that this category only represents 0.4\% of all license combinations in the matrix, this is where we conclude our discussion of it for this thesis.
 \end{enumerate}
+\newpage
+\section{Concluding remarks}
 
-\comment{Serge: Add a conclusion for the chapter and link to what is coming next.}
+In this Chapter, we examined the work laid out by the OSADL. The starting point of all information they provide is the open source license compliance checklists, which provide pseudocode-like interpretations of what measures need to be taken in the general case to be compliant with using a given license in a particular way.
+
+We also provided an example of how one detects the important property of copyleft clause presence based on a given checklist. In these checklists, that is mentioned explicitly, but it can also implicitly be constructed from the checklist statements itself, as we have done with the GPL-1.0-only license as an example. \\
+
+With these facts established, we lay the ground work for proposing a method that automatically assesses a license combination, built on top of the following key observations:
+
+\begin{itemize}
+	\item The dataset is relatively complete, by that we mean to say only 2 licenses out of the 116 have been assessed as questionable when it comes to those licenses having a copyleft license.
+	\item Similarly, only 1020 of the total 13456 possible combinations of said licenses was assessed to be unknown when it comes to the compatibility of that license combination.
+	\item When we examined the remaining license combinations inside the context of several classes, the presence of a copyleft clause in a license became a very powerful indicator for assessing combinations with that license.
+	\item We assessed that it is permissible to allow an automated system to answer yes or no, and not neither or both, to the question: Does the given license contain a copyleft clause?
+\end{itemize}
+
+The third observation already forms a part of the answer to our first research question. Given these observations combined, the next chapter will propose a method for automatically assessing license combinations, providing the remainder of the answers to the research questions we proposed in Chapter~\ref{ch:introduction}.

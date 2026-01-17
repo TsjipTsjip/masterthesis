@@ -213,7 +213,7 @@ def calculate_accuracy_by_majority(result_files):
                         true_negative += 1
                     else:
                         inaccurate += 1
-                        false_negative += 1
+                        false_positive += 1
                 case "Q":
                     # Ignore
                     pass

@@ -13,7 +13,7 @@ def get_license_fulltext(license_id, fulltext_dir="spdx"):
         with open(f"{fulltext_dir}/{license_id}.txt", 'r', encoding='utf-8') as file:
             return file.read()
     except FileNotFoundError:
-        print(f"Full text for license {license_id} not found in {fulltext_dir}.")
+        print(f"Full text for license {license_id} not found in {fulltext_dir}. Have you downloaded the dataset?")
         return None
 
 def get_osadl_matrix(matrix_filename="osadl/matrixseqexpl.json"):
@@ -26,7 +26,7 @@ def get_osadl_matrix(matrix_filename="osadl/matrixseqexpl.json"):
         with open(matrix_filename, 'r', encoding='utf-8') as file:
             return json.load(file)
     except FileNotFoundError:
-        print(f"OSADL matrix file {matrix_filename} not found.")
+        print(f"OSADL matrix file {matrix_filename} not found. Have you downloaded the dataset?")
         return None
     except json.JSONDecodeError:
         print(f"Error decoding JSON from {matrix_filename}.")

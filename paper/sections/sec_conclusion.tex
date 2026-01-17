@@ -12,39 +12,8 @@ In summary, we identified that by automating the detection of the presence of a 
 
 For the performance of this process, one must select a large language model. This thesis examined four models, which trade accuracy for inference speed. The most accurate model family is Qwen3, followed by Deepseek R1, Llama3 and Gemma3. If one wishes to examine an individual license combination, the high accuracy of the first model in this line is preferred. When assessing large amounts (exponential growth respective to adding new licenses to a list) of combinations, one can trade this off for inference speed and available processing power.
 
-We identified a number of interesting properties about each model, which can also be used to assess selection of other models to run this same experiment with as they are made generally available. This thesis primarily examined factors such as the model's stability (influencing the Majority-of-X variable), qualitatively assessed inference speed, and general architecture. \\
+We identified a number of interesting properties about each model, which can also be used to assess selection of other models to run this same experiment with as they are made generally available. This thesis primarily examined factors such as the model's stability (influencing the Majority-of-X variable), qualitatively assessed inference speed, and general architecture. \\\newpage
 
 Primarily, this thesis found that it is generally feasible to deploy large language models in solving the problem described, and we believe it poses a promising starting point for further refining these abilities.
 
 Additionally, this thesis only examined one specific process of making these compatibility assessments. Future work could also examine other systems that don't directly use natural language to interface with the large language models. For copyleft clause detection, many other methods of clustering into Yes / No exist which can be used. Additionally, at the end of Chapter~\ref{ch:results}, we discussed other factors that can help further improve accurate assessments, which can also be the subject of further research.
-
-\comment{Victor: This remains the template for the thesis, which I will take as instructions to formulate a conclusion chapter.}
-
-The first paragraph of the conclusion is usually a short review of this paper/thesis goals, problems, and context. 
-
-After that we generally cover the following main points in the next paragraphs:
-
-\begin{itemize}
-\item \textbf{Summary of Results.}
-   In a paper/thesis, we probably have many pages in previous sections presenting results. 
-   Now in the conclusion, it is time to put the most important results here for the reader. 
-   Especially research with measurable results, we highlight the numbers here. 
-\item \textbf{Main Findings / Conclusions.}
-   Many times, we have a result but based on its number we can draw a conclusion or formulate a finding on top of it. 
-   Even if it was previous discussed in an earlier section, we need to re-state here. 
-\item \textbf{Contributions.}
-   If we presented/discussed the main contributions of this research in the introduction, then we need to do again in the conclusion.
-   Do not repeat verbatim what was written in previous sections. 
-   In the conclusion, we expect contributions to be more detailed and linked to the results/findings when possible.
-\end{itemize}
-
-Avoid generic conclusion sentences that could be applied to anything. 
-For example, "Our technique showed good results which were beneficial to answer our research questions. 
-Our work can be used by other researchers to better understand our domain."
-Instead, go for more specific detailed results.
-For example, "Our technique showed a precision of 75\% which was 15\% higher than the baseline comparison. 
-Based on this we can see that ..."
-
-The final paragraph (or paragraphs) of the conclusion is about future research. 
-We can create a separate subsection for it if there are multiple paragraphs dedicated to future work. 
-Just be aware, it is not a good sign if future research content is longer than what we wrote for the previous paragraphs in the conclusion.

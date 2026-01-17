@@ -40,7 +40,7 @@ Let's now examine these results individually per model. \\
 
 \subsection{Accuracy scoring}
 
-We consider the results of the copyleft detection experiment first as follows: \\
+We consider the results of the copyleft detection experiment first as follows per model below. For each model, we will examine the average accuracy which individual runs without majority vote construction. We do this to show the difference to the accuracy of the majority vote construction method, and lastly, tables 5.3 through 5.6 will show confusion matrices which count the number of licenses that are actually copyleft in the top row, split up by their assessment by the LLM over the two columns. The same is true for the actually permissive licenses in the bottom row. It is important to remind ourselves that the total number of licenses in these matrices will always be 114, which is the number of licenses that were assessed by the OSADL. \\
 
 \textbf{Deepseek R1:8b:} This model is very inconsistent with its answers, answering differently across runs for 28 licenses in the dataset. Additionally, this model classifies 2 specific licenses incorrectly on all its runs. We will discuss this rather peculiar result after the listing of direct results. In a majority configuration however, we note that the accuracy increases (107 licenses correctly classified, as opposed to 104 in the best run). This suggests that this model does benefit from a majority vote setup. Notably, this model also does not make any false positive detections.
 
@@ -48,16 +48,14 @@ We consider the results of the copyleft detection experiment first as follows: \
 
 \textbf{Majority-of-7 accuracy:} 92.98\% (106/114)
 
-\comment{Serge: Confusion table is not explained.}
-
 \begin{table}[h]
 	\label{tab:deepseekr1-confmatrix}
 	\centering
 	\input{autogen/copyleft_summary_deepseek-r1-8b_majority_of_7.tex}
 	\caption{Deepseek R1:8b confusion matrix (Majority-of-7)}
 \end{table}
-
-\textbf{Gemma3:4b:} This model performed better, scoring an average accuracy across runs of 83.62\% (97/116). Its mistakes are also exclusively failures to detect a present copyleft license. The confusion matrix for the majority vote is given in Table~\ref{tab:gemma3-confmatrix}, which scored the same accuracy as the average accuracy. The model is very consistent, only differing in responses across runs for the MPL-1.1 license and the MPL-2.0-no-copyleft-exception license.
+\newpage
+\textbf{Gemma3:4b:} This model performed better, scoring an average accuracy across runs of 83.62\% (97/116). Its mistakes are also exclusively failures to detect a present copyleft license. The confusion matrix for the majority vote is given in Table~\ref{tab:gemma3-confmatrix}, which scored the same accuracy as the average accuracy. The model is very consistent, only differing in responses across runs for the MPL-1.1 license and the MPL-2.0-no-copyleft-exception license. Interestingly, this model also has the property of giving no false positive detections.
 
 \textbf{Average accuracy:} 83.33\%
 
@@ -102,7 +100,7 @@ These accuracy characteristics display an interesting property: The accuracy of 
 
 It is then a logical conclusion to say that a model will, generally, answer wrongly for a subset of the input licenses. And in this avenue, we examine whether or not we can identify any reasons for these mistakes made by the models. We start by examining the two licenses which all models got consistently wrong.
 
-\subsubsection{Universal mistakes}
+\subsubsection{Universally false inferences}
 
 The Gemma3, Deepseek R1 and Qwen3 model all failed to classify two licenses correctly, looking into the thinking of the models when making this decision, we can explain why:
 \begin{itemize}
@@ -116,20 +114,43 @@ The Gemma3, Deepseek R1 and Qwen3 model all failed to classify two licenses corr
 	\item \textbf{Sleepycat:} The sleepycat license is also always classified incorrectly. In this case, the source of confusion is a bit more obvious. The sleepycat license itself is actually 3 licenses which were concatenated together. Because of this, and the predictable nature of the format of these licenses, the models get confused when running inference, treating each license referenced as a separate question. As a result, it fails to comply with the answer format provided, meaning automatic detection of the answer fails as well for Deepseek R1 and Qwen3. For Gemma3, it actually is capable of considering the entire license as its own block, however it is mistaken in handling of the license itself, missing the fact that the Sleepycat section of this license is indeed BSD-3 Clause, but adds an additional clause which imposes a Copyleft clause to this format.
 \end{itemize}
 
-\subsubsection{Individual mistakes}
+\subsubsection{Individually false inferences}
 
-\comment{Victor: This heading needs a lot more love, and I intend to look at each mistaken license itself, determine where its copyleft clause is or isn't, and based on that, I will explain the model's mistake based on the reasonings it has provided.}
+Aside from the inaccuracies produced by all models, each model also had individual licenses it struggled to assess correctly. In this section, we examine these inaccuracies to determine if there is other model-specific issues. We will do this on a per-model basis. \\
 
-\textbf{Deepseek R1:} This model is a well-performing model that only seems to struggle on licenses which other models aside from qwen3 struggle to classify correctly as well. These are the CDDL and MS license families (4 total, though Deepseek specifically does correctly handle the MS-PL license). In terms of mistakes not shared by other models, it seems to struggle on the CPL-1.0 license, as well as both EPL licenses.
+\textbf{Deepseek R1:} We see this model struggle in particular for the EPL-1.0, EPL-2.0 and MS-RL licenses. It also is indecisive for the CDDL-1.0 and CDDL-1.1 licenses, where the model's accuracy approaches 50\% as more runs are made.
 
-\textbf{Gemma3:} We observe two kinds of mistakes for this model. Firstly, for many of the mistakes, we see that this model has answered incorrectly across the board. This makes this model unique in this sense, as none of the other models examined exhibit this kind of absolute behavior. Unfortunately, it is rather hard to determine why it does this. Secondly, we see that it is not as consistent for the MPL license family (3 total on the list) specifically, where it does answer nondeterministically each time the license is examined.
+For the EPL licenses, the copyleft property is constructed and not explicitly embedded into the license. By this we mean that both of these licenses require that source code be distributed under the same terms (section 3.2 of both licenses), and then separately from that, all forms of distribution are required to be accompanied by a source code distribution. It is this concept that the model appears to fail to identify, despite explicitly calling out both elements to come to the copyleft requirement in its reasoning. We have also looked at an example of the GPL-1.0-only license which is more widely known and used, which makes a similar construction to come to the copyleft requirement. Deepseek is not mistaken in the case of the GPL-1.0-only license, which seems to suggest the model may also be making use of more widely available knowledge it consumed in its training.
 
-\textbf{Llama3:} The mistakes of this model are harder to discuss in a general sense and appear to be linked to the model's limited reasoning capacity. We observe that in most cases, the model simply picks out an existing clause in the license and then considers that to be the full reasoning for a given decision. Another pattern it provides in its reasonings is a sort of reasoning loop, where it places the confident statement that the license does or does not contain a copyleft clause, and then argues that by providing the definition of such a clause, without making references to the actual license text.
+For the MS-RL license, the copyleft clause is more explicit, and contained within section 3A which states that if you distribute a file in any form (source code, binary object, ...) which contains code from the licensed work, you must distribute the source code and the license. It states that the license will govern the distributed file. This appears to be something that the model misses, as it does mention this section in every explanation, but writes it away as being about ensuring the license is propagated with derivative works, and not set up to govern those works. \\
 
-\textbf{Qwen3:} Artistic-2.0, CPL-1.0
+\textbf{Gemma3:} This model exhibits a very interesting property, where it is, as already previously described, very consistent. We also see this in its result forming, where the overview shows that in nearly all licenses, it will answer the same all the time. Sadly, this model doesn't appear to always include an explanation, and when it does, its explanations are very short. We recall however that this model only made false negative inaccuracies, where it says a copyleft license is permissive. When we look at the mistakes from this perspective, a pattern starts to form where the model very often states something along the lines of: "... grants a broad range of permissions.", to which the logical conclusion is to state that the license is a permissive license. As this is our lowest scoring model, it appears this model does not have sufficient reasoning capacity to make complex reasoning.
 
+Another observation we make is that this model is the only model to get the GPL, LGPL and AGPL licenses wrong as well. However, in this case this has a very different reasoning which appears to be tied to the license text exceeding the model's context window. As such, the model is presented an incomplete question, and gets confused. \\
 
-\section{Experiment 2: Combination reasoning}
+\textbf{Llama3:} The inaccuracies made by this model are hard to characterise, as they are very varied in nature. This model sets itself apart from the other models as a model which benefits a lot from being "generally right", and thus the Majority-of-15 configuration which we examined it in. The licenses which Deepseek struggled to classify correctly are also licenses which this model struggles to assess, and the explanations it makes for these licenses are very varied and hard to summarize, both for the individual runs that did get it right, and the runs that did not. A general truth is that for every license observed, this model does seem to touch on the specific sections of that license which makes it copyleft if applicable. \\
+
+\newpage\textbf{Qwen3:} This model is the most accurate model in the list. Aside from the IPL-1.0 and Sleepycat licenses which we discussed previously, it is mistaken in its assessment of exactly two more licenses. Firstly and most interestingly, the Artistic-2.0 license is assessed to be copyleft by this model which is wrong. When we look at all 15 runs, we see that it is actually quite adamant of this, answering the same in 14 out of the 15 runs we made. In these runs, it points primarily to section 4 of the license, which governs how Modified Version as Source (a definition provided by the license itself) may be distributed. This section defines that Modified Version as Source may be distributed under a specific set of terms, and it requires one of three conditions to hold:
+
+\begin{enumerate}
+	\item The Modified Version as Source must be available \textbf{to the copyright holder of the Standard Version only}, such that they are able to integrate the changes into the Standard Version.
+	
+	This is not a copyleft requirement, rather it simply ensures that changes may stream back up into the original work.
+	
+	\item The Modified Version's installation must not interfere with that of the Standard Version for end users.
+	
+	This too is not a copyleft requirement.
+	
+	\item Copied verbatim: Allow anyone who receives a copy of the Modified Version to make the Source form of the Modified Version available to others under (i) the Original License or (ii) a license that permits the licensee to freely copy, modify and redistribute the Modified Version using the same licensing terms that apply to the copy that the licensee received, and requires that the Source form of the Modified Version, and of any works derived from it, be made freely available in that license fees are prohibited but Distributor Fees are allowed.
+	
+	This is in part a copyleft license, in the sense that it limits the licenses under which a derivative work can be created to the Artistic-2.0 license itself, or a license which is constrained in the ways described above.
+\end{enumerate}
+
+However, as only one of these three conditions must hold, this license can both be a copyleft license if that clause is chosen, or a permissive license if another clause or implementation is chosen. This appears to be the primary reason of confusion for the Qwen3 model, which is curious as other models do not appear to "over-think" this in this way.
+
+Lastly, the model mistakenly assesses the CPL-1.0 license, but only in the Majority-of-3 configuration. In higher values of the X parameter, we observe that it does correctly identify the copyleft clause contained in the license. For the 2 out of 3 mistakes made for the evaluated configuration, the mistake seems to be the same as Deepseek's difficulty with the EPL licenses, where the model fails to recognise CPL-1.0's clause that requires all source code of derivative works to be distributed under the exact same license, combined with a separate clause requiring the source code of the derivative work to be available within a reasonable time frame upon request of a licensee. Exactly why it misses this in the mistaken runs is hard to reason about, as the model's responses do not go deeply into the decisionmaking leading to the assessment.
+
+\newpage\section{Experiment 2: Combination reasoning}
 
 The experiment as outlined in Chapter~\ref{ch:method} comes down to simply running an algorithm. When we do this, we obtain the following results table, which has the Majority-of-X parameter in the leftmost column. Results in bold are the results which correspond to the Majority-of-X value chosen for the model at the start of this chapter. \\
 
@@ -173,7 +194,7 @@ An immediately obvious observation is that, despite the complexities outlined in
 	\caption{Non Permissive-X combination reasoning results: Perc\% (Number)}
 \end{table}
 
-When we compare Table~\ref{tab:experiment2-large} to Table~\ref{tab:experiment2-permissive-removed}, we can say that all models are indeed worse at classifying models where a copyleft license may be involved. What's interesting is that all models lose approximately the same amount of accuracy too, all around 10\%. This is a qualitative observation, yet it shows that all models we assessed are somewhat similarly affected by the difficulty of copyleft license assessment. It is also important to point out that all models do consistently get the majority of these assessments right. \\
+When we compare Table~\ref{tab:experiment2-large} to Table~\ref{tab:experiment2-permissive-removed}, we can say that all models are indeed worse at classifying models where a copyleft license may be involved. What's interesting is that all models lose approximately the same amount of accuracy too, all around 10\%. This is a qualitative observation, yet it shows that all models we assessed are somewhat similarly affected by the difficulty of copyleft license assessment. It is also important to point out that all models do consistently get the majority of these assessments right. \\\newpage
 
 When we assess our four models, it is clear that on all cases, \textbf{Qwen3} performs the best, with \textbf{Deepseek R1} following close behind. The other two models are less accurate, but were observed to be significantly faster, again showing the tradeoff between accuracy and speed of inference. \\
 
